@@ -189,7 +189,7 @@ file-upload.org. Per aggiungerne uno basta la riga in `account`.
 ## 10. Build
 
 ```sh
-make            # = CGO_ENABLED=0 go build -trimpath -ldflags "-s -w" -o build/hoster .
+make            # = CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -ldflags "-s -w" -o hoster .
 make test       # vet, gofmt, test con -race, controlli dei manuali
 ```
 Richiede Go 1.24 (testato con 1.24.4). La prima build scarica `rardecode`.
@@ -247,3 +247,7 @@ valida).
   segnalati e rimossi dal sito che li ospita.
 - **Manuali in italiano**, come l'interfaccia del programma.
 - **Nessuna licenza**: il codice è visibile, tutti i diritti restano riservati.
+- **L'eseguibile nel repository** (richiesta dell'utente, subito dopo la
+  pubblicazione): `./hoster` per Linux x86-64 è registrato, così dopo un
+  `git clone` il programma è pronto anche su una macchina senza Go. `make` lo
+  rigenera; la versione per ARM resta nelle release.

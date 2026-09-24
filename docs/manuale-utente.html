@@ -100,8 +100,18 @@ indichi con <code>-j</code>), ricava i loro link diretti, li scarica insieme e s
 
 <p class="chapter-intro">Due strade: scaricare il programma pronto, oppure costruirlo dal codice sorgente.</p>
 
-<h3 id="programma-pronto" data-index="release;binario">Il programma pronto</h3>
-<p>Nella pagina delle <a href="https://github.com/nic-fio/HOSTER/releases/latest">release su GitHub</a> ci sono due
+<h3 id="nel-repository" data-index="eseguibile;git clone">Il programma pronto, con git clone</h3>
+<p>Il repository contiene già il programma compilato, il file <code>hoster</code> (per PC e tablet con processore Intel
+o AMD). Basta clonarlo:</p>
+<pre class="terminal">$ git clone https://github.com/nic-fio/HOSTER.git
+$ cd HOSTER
+$ ./hoster --help</pre>
+<p>Non serve installare altro. La cartella clonata può diventare direttamente la tua cartella di lavoro: i file
+personali (<code>account</code>, <code>links</code>) e <code>downloads/</code> sono esclusi dal repository, quindi non
+finiscono mai su GitHub per sbaglio.</p>
+
+<h3 id="programma-pronto" data-index="release;binario">Solo il programma, dalle release</h3>
+<p>Se non vuoi clonare, nella pagina delle <a href="https://github.com/nic-fio/HOSTER/releases/latest">release su GitHub</a> ci sono due
 file:</p>
 <table>
   <thead><tr><th>File</th><th>Per</th></tr></thead>
@@ -125,8 +135,9 @@ $ cd HOSTER
 $ tools/setup-dev.sh --install
 $ make
 $ make test</pre>
-<p><code>make</code> crea il programma in <code>build/hoster</code>; <code>make test</code> esegue tutti i controlli
-automatici. Il programma costruito così è identico a quello delle release.</p>
+<p><code>make</code> ricostruisce il programma <code>hoster</code> dal codice; <code>make test</code> esegue tutti i controlli
+automatici. Serve solo se vuoi modificare hoster, o usarlo su un computer ARM: il programma pronto nel repository è
+per processori Intel e AMD.</p>
 
 <h3 id="dove-lavora" data-index="cartella di lavoro">Dove cerca i suoi file</h3>
 <p>hoster cerca <code>account</code>, <code>links</code> e <code>passwords.txt</code> <strong>nella cartella da cui lo
@@ -507,7 +518,9 @@ utente, la tua email o dati del tuo account. Non pubblicarle senza averle guarda
     <tr><td>Codice, test, manuali, strumenti, tutta la storia delle modifiche</td>
         <td>Repository pubblico <a href="https://github.com/nic-fio/HOSTER">github.com/nic-fio/HOSTER</a></td>
         <td><code>git clone</code></td></tr>
-    <tr><td>Programma pronto da usare</td><td><a href="https://github.com/nic-fio/HOSTER/releases/latest">Release</a></td>
+    <tr><td>Programma pronto da usare (Intel/AMD)</td><td>Nel repository, file <code>hoster</code></td>
+        <td><code>git clone</code></td></tr>
+    <tr><td>Programma pronto per ARM</td><td><a href="https://github.com/nic-fio/HOSTER/releases/latest">Release</a></td>
         <td>Scaricarlo dal browser</td></tr>
     <tr><td>Questi manuali</td><td><a href="https://nic-fio.github.io/HOSTER/">nic-fio.github.io/HOSTER</a> e
         <code>docs/</code> nel repository</td><td>Online, o aprendo i file nel browser</td></tr>
@@ -521,20 +534,17 @@ utente, la tua email o dati del tuo account. Non pubblicarle senza averle guarda
   <li><strong>Scarica il progetto</strong>:
     <pre class="terminal">$ git clone https://github.com/nic-fio/HOSTER.git
 $ cd HOSTER</pre></li>
-  <li><strong>Prepara la macchina</strong> (installa Go e il resto, chiede <code>sudo</code>):
-    <pre class="terminal">$ tools/setup-dev.sh --install</pre>
-    Lo script dice anche quali file personali mancano.</li>
-  <li><strong>Costruisci e controlla</strong>:
-    <pre class="terminal">$ make
-$ make test</pre></li>
   <li><strong>Ricrea i file personali</strong>:
     <pre class="terminal">$ cp account.example account
 $ nano account
 $ chmod 600 account</pre></li>
-  <li><strong>Verifica</strong> con <code>build/hoster --dry-run</code>.</li>
+  <li><strong>Verifica</strong> con <code>./hoster --dry-run</code>. Fatto: il programma è già nel repository.</li>
 </ol>
-<p>Se non vuoi installare niente, basta il programma pronto della release (vedi
-<a href="#programma-pronto">Il programma pronto</a>) più il file <code>account</code>.</p>
+<p>Se vuoi anche poter modificare e ricostruire hoster, prepara la macchina (installa Go e il resto, chiede
+<code>sudo</code>) e controlla che tutto funzioni:</p>
+<pre class="terminal">$ tools/setup-dev.sh --install
+$ make
+$ make test</pre>
 
 <h3 id="backup-locale" data-index="backup.sh;bundle">Un backup che non dipende da GitHub</h3>
 <p><code>tools/backup.sh</code> salva l'intero progetto, con tutta la storia, in un solo file che si ripristina anche

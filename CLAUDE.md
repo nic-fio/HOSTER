@@ -30,6 +30,7 @@ Il perché di ciascuna è in [docs/decisioni-e-storia.md](docs/decisioni-e-stori
 | **Una barra per file** | I premium danno una connessione per file: la vista multi-segmento non serve. |
 | **TLS: ripiego automatico e mirato** | Solo per "autorità sconosciuta" (catena incompleta) e solo per quell'host; `-k` resta come forzatura. |
 | **File personali mai nel repository** | `account`, `links`, `LISTA_LINKS`, `passwords.txt` sono in `.gitignore`. Decisione dell'utente: le credenziali restano fuori del tutto, nemmeno cifrate. |
+| **L'eseguibile sta nel repository** | `./hoster` (Linux x86-64, statico) è registrato, così un `git clone` basta anche senza Go. Richiesta esplicita dell'utente. `make` lo rigenera. |
 | **Nessuna licenza** | Copyright nic-fio, tutti i diritti riservati; il codice è pubblico per poterlo leggere e recuperare. |
 | **Manuali in italiano, tema chiaro** | Stesso impianto di NG-EFI_SHELL (HTML in `docs/`, GitHub Pages), niente tema scuro. |
 
@@ -42,7 +43,8 @@ Il perché di ciascuna è in [docs/decisioni-e-storia.md](docs/decisioni-e-stori
 | `docs/` | `manuale-utente.html`, `manuale-tecnico.html`, `decisioni-e-storia.md`, `assets/`. Pubblicati con GitHub Pages. |
 | `tools/` | `setup-dev.sh` (pacchetti e identità git), `backup.sh` (bundle git), `check-docs.py` (controlli dei manuali). |
 | `account.example`, `links.example` | Modelli dei file personali. |
-| `build/`, `dist/` | Solo prodotti, mai registrati. |
+| `hoster` | L'eseguibile Linux x86-64, **registrato**: va rigenerato con `make` e registrato insieme a ogni modifica del codice. |
+| `dist/` | Binari per le release, mai registrati. |
 
 ## Prima di registrare una modifica
 
@@ -51,11 +53,14 @@ Il perché di ciascuna è in [docs/decisioni-e-storia.md](docs/decisioni-e-stori
    manuale utente, ogni file `.go` nella mappa del manuale tecnico, la
    versione deve coincidere ovunque). **Fallisce se i manuali non sono
    aggiornati.**
-2. Se hai toccato resolver, login o TLS: `make live` con `account` e
+2. Se hai cambiato il codice: `make` e registra anche `./hoster`, che deve
+   corrispondere al sorgente (`check-docs.py` verifica che esista e che la sua
+   versione coincida con `help.go`).
+3. Se hai toccato resolver, login o TLS: `make live` con `account` e
    `LISTA_LINKS` reali (lo lancia l'utente, le credenziali sono sue).
-3. Controlla che `git status` non mostri file personali. Mai `git add -A`
+4. Controlla che `git status` non mostri file personali. Mai `git add -A`
    senza guardare.
-4. I commit usano l'identità locale impostata da `tools/setup-dev.sh`
+5. I commit usano l'identità locale impostata da `tools/setup-dev.sh`
    (indirizzo noreply di GitHub), che tiene fuori quello personale.
 
 Rilascio: aggiorna la versione in `help.go` (`"hoster 1.0"`), in `README.md`,

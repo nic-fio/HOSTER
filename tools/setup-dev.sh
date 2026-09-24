@@ -92,7 +92,7 @@ cat <<'END'
 
 Poi verifica che tutto funzioni davvero:
 
-    make            # build/hoster
+    make            # ricostruisce ./hoster dal sorgente
     make test       # vet, gofmt, test con -race, controlli dei manuali
-    build/hoster --dry-run   # risolve i link senza scaricare
+    ./hoster --dry-run   # risolve i link senza scaricare
 END

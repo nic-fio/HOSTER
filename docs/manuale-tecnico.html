@@ -124,6 +124,7 @@ se un file cambia lunghezza di più del 10%, o ne compare uno nuovo senza riga q
   <thead><tr><th>Percorso</th><th>Contenuto</th></tr></thead>
   <tbody>
     <tr><td><code>*.go</code>, <code>go.mod</code>, <code>go.sum</code></td><td>Il programma e i test (modulo <code>hoster</code>).</td></tr>
+    <tr><td><code>hoster</code></td><td>L'eseguibile Linux x86-64 statico, <strong>registrato nel repository</strong> perché un <code>git clone</code> basti anche senza Go. Si rigenera con <code>make</code> e si registra insieme a ogni modifica del codice.</td></tr>
     <tr><td><code>docs/</code></td><td>I due manuali HTML, <code>index.html</code>, <code>decisioni-e-storia.md</code>, <code>assets/</code> (stile, script, Mermaid). Pubblicati con GitHub Pages dalla cartella <code>/docs</code>.</td></tr>
     <tr><td><code>tools/setup-dev.sh</code></td><td>Controlla e installa i pacchetti, imposta l'identità git locale, segnala i file personali mancanti.</td></tr>
     <tr><td><code>tools/backup.sh</code></td><td>Bundle git completo (tutti i rami, tag, storia); con <code>--personal</code> anche un archivio dei file personali.</td></tr>
@@ -147,11 +148,11 @@ $ make dist</pre>
 <table>
   <thead><tr><th>Comando</th><th>Effetto</th></tr></thead>
   <tbody>
-    <tr><td><code>make</code></td><td><code>CGO_ENABLED=0 go build -trimpath -ldflags "-s -w" -o build/hoster .</code>: binario statico, senza simboli.</td></tr>
+    <tr><td><code>make</code></td><td><code>CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -ldflags "-s -w" -o hoster .</code>: rigenera l'eseguibile registrato, statico e senza simboli, sempre per x86-64 anche se costruito su ARM.</td></tr>
     <tr><td><code>make test</code></td><td><code>go vet</code>, <code>gofmt -l</code>, <code>tools/check-docs.py</code>, poi <code>go test -race -count=1</code>. Il <code>-race</code> richiede cgo, quindi <code>gcc</code>.</td></tr>
     <tr><td><code>make dist</code></td><td>Binari <code>dist/hoster-linux-amd64</code> e <code>dist/hoster-linux-arm64</code> più <code>SHA256SUMS</code>.</td></tr>
     <tr><td><code>make live</code></td><td>Il test dal vivo (<code>HOSTER_LIVE=1</code>): servono <code>account</code> e <code>LISTA_LINKS</code> reali.</td></tr>
-    <tr><td><code>make clean</code></td><td>Elimina <code>build/</code> e <code>dist/</code>.</td></tr>
+    <tr><td><code>make clean</code></td><td>Elimina <code>dist/</code> (<code>./hoster</code> resta: fa parte del repository).</td></tr>
   </tbody>
 </table>
 <p>Su Debian 13 il pacchetto <code>golang-go</code> è già la 1.24. Con un Go più vecchio ma almeno 1.21, la direttiva
@@ -171,7 +172,8 @@ del tag annotato diventa la descrizione.</p>
 </ol>
 
 <h3 id="recupero-tecnico" data-index="recupero;bundle">Recupero e backup</h3>
-<p>Il repository è progettato perché un <code>git clone</code> basti a ricostruire tutto, tranne i file personali:</p>
+<p>Il repository è progettato perché un <code>git clone</code> basti a riavere tutto, tranne i file personali. Il
+programma pronto è già dentro (<code>./hoster</code>); per ricostruirlo e verificarlo:</p>
 <pre class="terminal">$ git clone https://github.com/nic-fio/HOSTER.git
 $ cd HOSTER &amp;&amp; tools/setup-dev.sh --install &amp;&amp; make test</pre>
 <p><code>tools/setup-dev.sh</code> imposta anche l'identità git locale (<code>nic-fio</code> con l'indirizzo noreply di
@@ -398,7 +400,7 @@ gli ultimi 60.</p>
 
 <h3 id="aggiungere-sito" data-index="sito nuovo">Adattare il resolver a un sito nuovo</h3>
 <ol class="steps">
-  <li>Aggiungi account e un link, poi <code>build/hoster --dry-run --debug dbg</code>.</li>
+  <li>Aggiungi account e un link, poi <code>make &amp;&amp; ./hoster --dry-run --debug dbg</code>.</li>
   <li><strong>Login</strong>: in <code>login_*_2result.html</code> c'è l'area utente? Se no, guarda il form in
       <code>login_*_1page.html</code>: nomi dei campi diversi da <code>login</code>/<code>password</code>, un token
       con altro nome, un captcha (allora il sito non è supportabile). Adegua <code>ensureLogin</code> o
@@ -626,6 +628,8 @@ Parte solo con <code>HOSTER_LIVE=1</code> (<code>make live</code>); <code>HOSTER
       (<code>data-index</code> di un <code>&lt;dt&gt;</code>), o il manuale documenta un'opzione che non esiste;</li>
   <li>un file <code>.go</code> manca dalla <a href="#mappa-file">mappa dei file</a>, o il numero di righe indicato si
       scosta di più del 10% da quello vero;</li>
+  <li>l'eseguibile <code>./hoster</code> manca, non è un ELF x86-64 o non contiene la versione di
+      <code>help.go</code> (segno che non è stato rigenerato dopo un cambio di versione);</li>
   <li>la versione di <code>help.go</code> non coincide con quella di <code>README.md</code>, <code>docs/index.html</code>
       e dei due manuali;</li>
   <li>un link interno <code>#ancora</code> dei manuali punta a un id che non esiste.</li>

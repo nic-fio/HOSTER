@@ -1,11 +1,11 @@
 # hoster: build, test e controlli della documentazione.
 #
-#   make           build/hoster, il binario statico per questa macchina
+#   make           ./hoster, il binario statico Linux x86-64 registrato nel repository
 #   make test      go vet, gofmt, test con -race, controlli dei manuali
 #   make docs-check solo i controlli dei manuali
 #   make dist      binari statici per Linux amd64 e arm64 in dist/
 #   make live      test dal vivo con account e link reali (HOSTER_LIVE=1)
-#   make clean     elimina build/ e dist/
+#   make clean     elimina dist/ (./hoster resta: fa parte del repository)
 
 GO      ?= go
 LDFLAGS := -s -w
@@ -16,7 +16,7 @@ VERSION := $(shell sed -n 's/.*"hoster \([0-9.]*\)".*/\1/p' help.go)
 all: build
 
 build:
-	CGO_ENABLED=0 $(GO) build -trimpath -ldflags "$(LDFLAGS)" -o build/hoster .
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GO) build -trimpath -ldflags "$(LDFLAGS)" -o hoster .
 
 vet:
 	$(GO) vet ./...
@@ -42,4 +42,4 @@ live:
 	HOSTER_LIVE=1 $(GO) test -run TestLiveResolve -v -count=1 ./...
 
 clean:
-	rm -rf build dist
+	rm -rf dist

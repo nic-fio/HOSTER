@@ -50,7 +50,16 @@ online su **https://nic-fio.github.io/HOSTER/**, oppure apri
 
 ## Installazione
 
-**Il programma pronto**: dall'[ultima release](https://github.com/nic-fio/HOSTER/releases/latest)
+**Il programma pronto è nel repository**: il file `hoster` (Linux x86-64, PC e
+tablet) è già compilato. Clonare basta:
+
+```
+git clone https://github.com/nic-fio/HOSTER.git
+cd HOSTER
+./hoster --help
+```
+
+**Solo il programma, senza clonare**: dall'[ultima release](https://github.com/nic-fio/HOSTER/releases/latest)
 scarica `hoster-linux-amd64` (PC e tablet x86-64) o `hoster-linux-arm64`, poi:
 
 ```
@@ -64,21 +73,22 @@ mv hoster-linux-amd64 hoster && chmod +x hoster
 git clone https://github.com/nic-fio/HOSTER.git
 cd HOSTER
 tools/setup-dev.sh --install    # pacchetti (chiede sudo) e identità git
-make && make test               # build/hoster, poi tutti i controlli
+make && make test               # ricostruisce ./hoster, poi tutti i controlli
 ```
 
 ## Recupero dopo un guasto
 
-Il repository contiene **tutto** tranne i file personali: sorgenti, test,
-manuali, strumenti, la storia completa. Per ripartire su un altro computer o
-tablet:
+Il repository contiene **tutto** tranne i file personali: l'eseguibile pronto,
+sorgenti, test, manuali, strumenti, la storia completa. Per ripartire su un
+altro computer o tablet:
 
 ```
 git clone https://github.com/nic-fio/HOSTER.git
-cd HOSTER && tools/setup-dev.sh --install && make test
+cd HOSTER && ./hoster --help
 ```
 
-poi ricrea `account` (partendo da `account.example`) e, se servono, `links` e
+Per ricostruirlo dal sorgente: `tools/setup-dev.sh --install && make test`.
+Poi ricrea `account` (partendo da `account.example`) e, se servono, `links` e
 `passwords.txt`: per scelta **non sono mai pubblicati**. `tools/backup.sh`
 crea anche un backup su file, che si ripristina senza rete; con `--personal`
 salva a parte i file personali. I dettagli sono nel capitolo *Recupero su un

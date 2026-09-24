@@ -5,7 +5,7 @@
 /passwords.txt
 
 # Prodotti e file di lavoro
-/hoster
+# ./hoster invece È registrato: il repository contiene l'eseguibile pronto.
 /build/
 /dist/
 /downloads/

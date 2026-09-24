@@ -7,6 +7,8 @@ Fallisce se:
     un'opzione che non esiste;
   - un file .go manca dalla mappa dei file del manuale tecnico, o il numero
     di righe indicato si scosta di più del 10% da quello vero;
+  - l'eseguibile ./hoster (registrato nel repository) manca, non è un ELF
+    x86-64 o non contiene la versione di help.go;
   - la versione di help.go non coincide con quella di README.md,
     docs/index.html e dei due manuali;
   - un link interno #ancora dei manuali punta a un id inesistente.
@@ -78,6 +80,18 @@ else:
     for rel, pat in checks.items():
         if not re.search(pat, (ROOT / rel).read_text()):
             err(f"{rel}: la versione non è {version} (come in help.go)")
+
+# ---- eseguibile registrato ----
+exe = ROOT / "hoster"
+if not exe.is_file():
+    err("manca l'eseguibile ./hoster: esegui 'make' e registralo")
+else:
+    data = exe.read_bytes()
+    # ELF, 64 bit, x86-64 (e_machine = 0x3E)
+    if data[:4] != b"\x7fELF" or data[4] != 2 or data[18:20] != b"\x3e\x00":
+        err("./hoster non è un eseguibile Linux x86-64: rigeneralo con 'make'")
+    elif version and ("hoster " + version).encode() not in data:
+        err(f"./hoster non contiene la versione {version}: rigeneralo con 'make'")
 
 # ---- ancore interne ----
 for path, text in ((USER, user), (TECH, tech)):

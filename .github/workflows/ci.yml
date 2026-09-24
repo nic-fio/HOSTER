@@ -1,0 +1,74 @@
+# Build e test di hoster a ogni push e pull request; su un tag di versione (v*)
+# pubblica anche una GitHub Release con i binari costruiti qui dal sorgente del tag.
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Test (vet, gofmt, -race, controlli dei manuali)
+        run: make test
+
+      - name: Binari Linux amd64 e arm64
+        run: make dist
+
+      - name: Conserva i binari
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build-test
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # l'oggetto del tag annotato, per le note di rilascio
+          fetch-tags: true
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: Crea la release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # il messaggio del tag annotato diventa la descrizione della release
+          git tag -l --format='%(contents)' "$GITHUB_REF_NAME" > notes.md
+          [ -s notes.md ] || echo "hoster $GITHUB_REF_NAME" > notes.md
+          cat >> notes.md <<'NOTES'
+
+          Costruito e testato da GitHub Actions a partire da questo tag.
+
+          **Scarica** `hoster-linux-amd64` (PC, tablet x86-64) oppure
+          `hoster-linux-arm64` (Raspberry Pi, ARM a 64 bit), rinominalo in
+          `hoster` e rendilo eseguibile con `chmod +x hoster`. Controlla il
+          download con `sha256sum -c SHA256SUMS --ignore-missing`.
+
+          Servono accanto al programma i file `account` e `links`: vedi il
+          manuale utente, https://nic-fio.github.io/HOSTER/
+          NOTES
+          gh release create "$GITHUB_REF_NAME" dist/hoster-linux-* dist/SHA256SUMS \
+            --title "hoster $GITHUB_REF_NAME" --notes-file notes.md --verify-tag

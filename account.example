@@ -1,0 +1,4 @@
+# Un host per riga. Formato:  dominio:userid;password
+# (il primo ':' separa il dominio; il primo ';' separa utente e password)
+worldbytez.com:iltuouser;latuapassword
+terabytez.com:altrouser;altrapassword

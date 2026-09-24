@@ -1,0 +1,15 @@
+# Dati personali: non entrano MAI nel repository pubblico.
+/account
+/links
+/LISTA_LINKS
+/passwords.txt
+
+# Prodotti e file di lavoro
+/hoster
+/build/
+/dist/
+/downloads/
+/dbg/
+*.part
+*.part.hoster
+*.bundle

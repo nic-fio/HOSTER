@@ -1,7 +1,7 @@
 # hoster — decisioni e storia
 
 > Perché hoster è fatto così: il contesto, le decisioni e la storia del progetto.
-> Il funzionamento in dettaglio è nel [manuale tecnico](https://nic-fio.github.io/HOSTER/HOSTER_Manuale_Tecnico.html).
+> Il funzionamento in dettaglio è nel [manuale tecnico](https://nic-fio.github.io/HOSTER/Technical%20Manual.html) (in inglese).
 > Stato: **completo e collaudato** (giugno 2026). Uso strettamente **personale**:
 > non viene distribuito, serve a scaricare con i propri account contenuti che si
 > è autorizzati a scaricare (es. distribuzioni Linux). Non implementa né intende
@@ -267,3 +267,17 @@ documentazione dei suoi progetti abbia un aspetto unico.
 - **Ricerca e indice analitico conservati**: i modelli IR non li hanno, ma
   l'utente ha scelto di tenerli, integrati nell'aspetto IR.
 - **Niente logo**: hoster non ne ha uno. In copertina c'è solo il nome.
+
+### Manuali in inglese (30 settembre 2026)
+
+Decisione del proprietario: i due manuali sono tradotti in inglese e
+rinominati `docs/User Manual.html` e `docs/Technical Manual.html` (negli
+indirizzi lo spazio diventa `%20`).
+
+- **Solo i manuali**: il programma (messaggi, guida integrata), il codice, i
+  commenti e gli altri documenti restano in italiano.
+- **Messaggi citati come appaiono**: i manuali riportano in italiano ciò che
+  hoster scrive a schermo, con la traduzione accanto dove serve.
+- **Aspetto invariato**: struttura, palette e stile dei documenti sono
+  rimasti identici; sono cambiati solo i testi (compresi i termini
+  dell'indice analitico) e i collegamenti ai nuovi nomi.

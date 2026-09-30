@@ -1,0 +1,1064 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>User Manual — hoster</title>
+<meta name="description" content="User manual for hoster, the multi-host download manager for the terminal: installation, accounts and links, downloading, extraction, troubleshooting, option reference.">
+<style>
+*{box-sizing:border-box} html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;background:#e9edf2;color:#111827;font-family:Outfit,-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-size:15px;line-height:1.62}
+.doc{max-width:1320px;margin:0 auto;background:#fff;box-shadow:0 1px 30px rgba(15,23,42,.10)}
+a{color:#0050C0;text-decoration:none}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.88em;background:#eef2f7;padding:.08em .38em;border-radius:4px;color:#003a90}
+/* Cover */
+.cover{position:relative;padding:64px 56px;min-height:56vh;background:linear-gradient(135deg,#0050C0 0%,#003a90 100%);color:#fff;overflow:hidden}
+.cover-logo{margin-bottom:38px;position:relative;z-index:2}
+.cover-kicker{text-transform:uppercase;letter-spacing:.24em;font-size:12px;font-weight:700;color:#9dc0ff;margin-bottom:14px;position:relative;z-index:2}
+.cover-title{font-size:56px;line-height:1.02;margin:0 0 12px;font-weight:800;letter-spacing:-.02em;position:relative;z-index:2}
+.cover-sub{font-size:19px;color:#cfe0ff;max-width:32em;margin-bottom:44px;position:relative;z-index:2}
+.cover-meta{display:flex;gap:36px;position:relative;z-index:2}
+.cover-meta div{display:flex;flex-direction:column} .cover-meta span{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:#9dc0ff}
+.cover-meta b{font-size:16px;color:#fff}
+.cover-swoosh{position:absolute;right:-90px;bottom:-140px;width:460px;height:460px;border-radius:50%;background:radial-gradient(circle,#3b82f655,transparent 70%);z-index:1}
+/* Layout */
+.with-side{display:flex;align-items:flex-start}
+.side{width:290px;flex:0 0 290px;background:#f8fafc;border-right:1px solid #e5e7eb;align-self:stretch}
+.side-inner{position:sticky;top:0;padding:32px 24px;max-height:100vh;overflow:auto}
+.main{flex:1;padding:48px 64px;min-width:0}
+/* TOC */
+.toc-head{font-size:14px;text-transform:uppercase;letter-spacing:.14em;color:#003a90;margin:0 0 14px;font-weight:800}
+.toc-list{list-style:none;margin:0;padding:0}
+.toc-list a{display:flex;gap:9px;align-items:baseline;padding:4px 0;color:#334155}
+.toc-list a:hover{color:#0050C0}
+.toc-ch{font-weight:700;margin-top:6px} .toc-ch a{color:#0f172a}
+.toc-se a{font-size:13px;color:#64748b;padding-left:8px}
+.toc-n{flex:0 0 30px;color:#0050C0;font-weight:700;font-variant-numeric:tabular-nums}
+.toc-se .toc-n{flex-basis:36px;font-weight:600}
+/* Chapters */
+.chapter{margin-bottom:20px}
+.ch-head{border-bottom:3px solid #0050C0;padding-bottom:10px;margin:8px 0 22px}
+.ch-kick{text-transform:uppercase;letter-spacing:.16em;font-size:11.5px;font-weight:700;color:#0050C0}
+.h-ch{font-size:34px;font-weight:800;letter-spacing:-.02em;color:#003a90;margin:4px 0 0}
+.h-sec{font-size:21px;font-weight:700;color:#003a90;margin:30px 0 10px;padding-left:12px;border-left:4px solid #3b82f6}
+.main h4{font-size:16px;color:#0f172a;margin:20px 0 6px}
+.lead{font-size:17px;color:#334155}
+.main p{margin:10px 0} .ul,.ol{margin:10px 0;padding-left:22px} .ul li,.ol li{margin:4px 0}
+/* Figure/table */
+.fig{margin:20px 0;padding:18px;background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;text-align:center}
+.fig svg{max-width:100%;height:auto}
+.cap{font-size:12.5px;color:#64748b;margin-top:10px;text-align:center}
+.tbl-wrap{margin:18px 0} .tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+.tbl th{text-align:left;padding:10px 12px;background:#f1f5f9;color:#0f172a;font-weight:700;border-bottom:2px solid #0050C0}
+.tbl td{padding:9px 12px;border-bottom:1px solid #e5e7eb;vertical-align:top}
+.tbl tr:nth-child(even) td{background:#f8fafc}
+/* callout */
+.callout{display:flex;gap:14px;align-items:flex-start;margin:18px 0;padding:14px 18px;border-radius:8px;font-size:14.5px}
+.callout-i{flex:0 0 26px;height:26px;border-radius:50%;color:#fff;font-weight:800;text-align:center;line-height:26px;font-style:italic}
+.c-info{background:#eff6ff;border-left:4px solid #0050C0} .c-info .callout-i{background:#0050C0}
+.c-warn{background:#fffbeb;border-left:4px solid #d97706} .c-warn .callout-i{background:#d97706;font-style:normal}
+.c-ok{background:#f0fdf4;border-left:4px solid #16a34a} .c-ok .callout-i{background:#16a34a;font-style:normal}
+/* code */
+.code{background:#0f172a;color:#e2e8f0;padding:16px 18px;border-radius:10px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.8px;line-height:1.55;overflow-x:auto;margin:14px 0}
+.code code{background:none;padding:0;border-radius:0;color:inherit;font-size:inherit}
+.code .k{color:#c084fc;font-weight:600} .code .cm{color:#64748b;font-style:italic} .code .st{color:#86efac}
+/* deflist */
+.deflist{margin:12px 0} .deflist dt{font-weight:700;color:#003a90;font-family:ui-monospace,Menlo,monospace;font-size:13.5px;margin-top:10px}
+.deflist dd{margin:2px 0 0;color:#334155;font-size:14px}
+.doc-foot{padding:20px 52px;border-top:1px solid #e5e7eb;color:#94a3b8;font-size:12px;text-align:center}
+/* print */
+@page{size:A4;margin:16mm 15mm 18mm;@bottom-center{content:counter(page)}}
+@media print{
+ body{background:#fff} .doc{box-shadow:none;max-width:none}
+ .with-side{display:block} .side{display:none} .main{padding:0}
+ .cover{min-height:auto;page-break-after:always}
+ .chapter{page-break-before:always} .sec,.fig,.tbl-wrap,.callout,.code{page-break-inside:avoid}
+ a{color:inherit}
+}
+
+/* Manuale utente: etichette dell'interfaccia e procedure */
+.ui{font-weight:600;color:#003a90;background:#eff6ff;border:1px solid #bfdbfe;border-radius:5px;padding:.02em .4em;font-size:.93em;white-space:nowrap}
+.steps{counter-reset:st;list-style:none;margin:14px 0;padding:0}
+.steps>li{counter-increment:st;position:relative;padding:8px 0 8px 44px;margin:0;border-left:2px solid #dbeafe;margin-left:15px}
+.steps>li:before{content:counter(st);position:absolute;left:-16px;top:6px;width:30px;height:30px;border-radius:50%;background:#0050C0;color:#fff;font-weight:800;text-align:center;line-height:30px;font-size:14px}
+.steps>li:last-child{border-left-color:transparent}
+
+/* hoster: nome in copertina (solo testo, niente logo) */
+.cover-word{display:inline-block;font-size:44px;font-weight:800;letter-spacing:-.01em;line-height:1;color:#fff;padding-bottom:10px;border-bottom:4px solid #8fb6ff}
+/* hoster: tasti, etichette, codice */
+kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.82em;background:#fff;border:1px solid #cbd5e1;border-bottom-width:2px;border-radius:5px;padding:.05em .4em;color:#0f172a;white-space:nowrap}
+.code .p{color:#64748b;user-select:none}
+.badge{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#fff;background:#16a34a;border-radius:4px;padding:1px 7px;margin-right:6px}
+.deflist .dt-t{font-family:Outfit,-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-size:15px}
+.deflist dt[id]{scroll-margin-top:16px} .sec{scroll-margin-top:12px}
+/* hoster: ricerca nella barra laterale */
+.srch{margin:0 0 26px}
+.srch .toc-head{display:block}
+.srch-q{width:100%;font:inherit;font-size:14px;padding:8px 11px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;color:#0f172a;outline:none}
+.srch-q:focus{border-color:#0050C0;box-shadow:0 0 0 3px #dbeafe}
+.srch-info{font-size:12px;color:#64748b;margin:6px 2px 0;min-height:1em}
+.srch-res{list-style:none;margin:8px 0 0;padding:0}
+.srch-res li{margin:0}
+.srch-res a{display:block;padding:7px 9px;border-radius:7px;border-left:3px solid transparent;color:#334155}
+.srch-res a:hover,.srch-res a.on{background:#eff6ff;border-left-color:#0050C0}
+.srch-res .r-t{display:flex;gap:8px;font-weight:700;font-size:13px;color:#0f172a}
+.srch-res .r-t .toc-n{flex:0 0 auto}
+.srch-res .r-s{display:block;font-size:12px;color:#64748b;line-height:1.45;margin-top:2px}
+.srch-res mark,mark.hit{background:#fde68a;color:inherit;border-radius:2px;padding:0 1px}
+.toc-list.filtering li{opacity:.35} .toc-list.filtering li.toc-hit{opacity:1}
+.toc-list.filtering li.toc-hit a{color:#0050C0}
+.sec.flash{animation:flash 1.6s ease-out}
+@keyframes flash{0%{background:#eff6ff}100%{background:transparent}}
+/* hoster: indice analitico */
+.idx{columns:2 300px;column-gap:40px;margin-top:18px}
+.idx-g{break-inside:avoid;margin:0 0 18px}
+.idx-l{font-size:14px;text-transform:uppercase;letter-spacing:.14em;color:#003a90;font-weight:800;margin:0 0 6px;padding-bottom:4px;border-bottom:2px solid #0050C0}
+.idx-ul{list-style:none;margin:0;padding:0}
+.idx-ul li{margin:3px 0;font-size:14px;color:#334155;break-inside:avoid}
+.idx-t{font-weight:700;color:#0f172a}
+.idx-t code{font-weight:600}
+.idx-ul a{font-size:13px;white-space:nowrap}
+/* hoster: schermi stretti */
+@media (max-width:900px){
+ .with-side{display:block} .side{width:auto;border-right:0;border-bottom:1px solid #e5e7eb}
+ .side-inner{position:static;max-height:none;padding:24px 16px}
+ .main{padding:28px 16px} .cover{padding:40px 16px;min-height:auto}
+ .cover-title{font-size:40px} .cover-meta{flex-wrap:wrap;gap:18px 28px}
+ .tbl-wrap{overflow-x:auto}
+}
+@media print{ .srch{display:none} mark.hit{background:none} .idx{columns:2} }
+</style></head>
+<body>
+<div class="doc">
+  <section class="cover">
+    <div class="cover-logo"><span class="cover-word">hoster</span></div>
+    <div class="cover-kicker">User documentation</div>
+    <h1 class="cover-title">User Manual</h1>
+    <div class="cover-sub">hoster — multi-host download manager for the terminal · Guide to installation, downloading, archive extraction and troubleshooting</div>
+    <div class="cover-meta">
+      <div><span>Version</span><b>1.0</b></div>
+      <div><span>Date</span><b>September 2026</b></div>
+      <div><span>Status</span><b>Stable</b></div>
+      <div><span>System</span><b>64-bit Linux</b></div>
+    </div>
+    <div class="cover-swoosh"></div>
+  </section>
+  <div class="with-side">
+    <aside class="side"><div class="side-inner"><div class="srch" id="srch" hidden><label class="toc-head" for="srch-q">Search</label><input type="search" id="srch-q" class="srch-q" placeholder="A word, an option…  ( / )" autocomplete="off" spellcheck="false"><div class="srch-info" id="srch-info" aria-live="polite"></div><ol class="srch-res" id="srch-res"></ol></div><h2 class="toc-head">Contents</h2><ul class="toc-list" id="toc"><li class="toc-ch"><a href="#introduzione"><span class="toc-n">1</span><span class="toc-t">Welcome</span></a></li><li class="toc-se"><a href="#cos-e"><span class="toc-n">1.1</span><span class="toc-t">What hoster is</span></a></li><li class="toc-se"><a href="#cosa-non-fa"><span class="toc-n">1.2</span><span class="toc-t">What it does not do</span></a></li><li class="toc-se"><a href="#come-funziona-in-breve"><span class="toc-n">1.3</span><span class="toc-t">How it works, in brief</span></a></li><li class="toc-se"><a href="#a-chi"><span class="toc-n">1.4</span><span class="toc-t">How to use this manual</span></a></li><li class="toc-se"><a href="#convenzioni"><span class="toc-n">1.5</span><span class="toc-t">Conventions</span></a></li><li class="toc-ch"><a href="#installazione"><span class="toc-n">2</span><span class="toc-t">Installation and first run</span></a></li><li class="toc-se"><a href="#requisiti"><span class="toc-n">2.1</span><span class="toc-t">Requirements</span></a></li><li class="toc-se"><a href="#nel-repository"><span class="toc-n">2.2</span><span class="toc-t">The ready-made program, with git clone</span></a></li><li class="toc-se"><a href="#programma-pronto"><span class="toc-n">2.3</span><span class="toc-t">Just the program, from the releases</span></a></li><li class="toc-se"><a href="#dal-sorgente"><span class="toc-n">2.4</span><span class="toc-t">From the source code</span></a></li><li class="toc-se"><a href="#dove-lavora"><span class="toc-n">2.5</span><span class="toc-t">Where it looks for its files</span></a></li><li class="toc-se"><a href="#aggiornare"><span class="toc-n">2.6</span><span class="toc-t">Updating hoster</span></a></li><li class="toc-ch"><a href="#guida-integrata"><span class="toc-n">3</span><span class="toc-t">The built-in guide</span></a></li><li class="toc-se"><a href="#aprire-guida"><span class="toc-n">3.1</span><span class="toc-t">Opening the guide</span></a></li><li class="toc-se"><a href="#schede"><span class="toc-n">3.2</span><span class="toc-t">The tabs</span></a></li><li class="toc-se"><a href="#tasti"><span class="toc-n">3.3</span><span class="toc-t">The keys</span></a></li><li class="toc-se"><a href="#guida-testo"><span class="toc-n">3.4</span><span class="toc-t">When the guide appears as text</span></a></li><li class="toc-ch"><a href="#primi-passi"><span class="toc-n">4</span><span class="toc-t">First steps</span></a></li><li class="toc-se"><a href="#percorso"><span class="toc-n">4.1</span><span class="toc-t">The path</span></a></li><li class="toc-se"><a href="#file-account"><span class="toc-n">4.2</span><span class="toc-t">The account file</span></a></li><li class="toc-se"><a href="#file-links"><span class="toc-n">4.3</span><span class="toc-t">The links file</span></a></li><li class="toc-se"><a href="#prova-senza-scaricare"><span class="toc-n">4.4</span><span class="toc-t">Trying without downloading</span></a></li><li class="toc-se"><a href="#primo-download"><span class="toc-n">4.5</span><span class="toc-t">The first download</span></a></li><li class="toc-ch"><a href="#scaricare"><span class="toc-n">5</span><span class="toc-t">Downloading</span></a></li><li class="toc-se"><a href="#parallelo"><span class="toc-n">5.1</span><span class="toc-t">How many files at once</span></a></li><li class="toc-se"><a href="#connessioni"><span class="toc-n">5.2</span><span class="toc-t">Connections per file</span></a></li><li class="toc-se"><a href="#ripresa"><span class="toc-n">5.3</span><span class="toc-t">Interruptions and resuming</span></a></li><li class="toc-se"><a href="#link-scaduti"><span class="toc-n">5.4</span><span class="toc-t">Expired links</span></a></li><li class="toc-se"><a href="#nomi-e-doppioni"><span class="toc-n">5.5</span><span class="toc-t">File names and duplicates</span></a></li><li class="toc-se"><a href="#banda"><span class="toc-n">5.6</span><span class="toc-t">Limiting bandwidth</span></a></li><li class="toc-se"><a href="#rete-lenta"><span class="toc-n">5.7</span><span class="toc-t">Slow or unstable networks</span></a></li><li class="toc-se"><a href="#altra-cartella"><span class="toc-n">5.8</span><span class="toc-t">Another folder or another list</span></a></li><li class="toc-se"><a href="#messaggi"><span class="toc-n">5.9</span><span class="toc-t">More or fewer messages</span></a></li><li class="toc-ch"><a href="#estrarre"><span class="toc-n">6</span><span class="toc-t">Extracting archives</span></a></li><li class="toc-se"><a href="#estrarre-dopo"><span class="toc-n">6.1</span><span class="toc-t">Downloading and extracting</span></a></li><li class="toc-se"><a href="#estrarre-solo"><span class="toc-n">6.2</span><span class="toc-t">Extracting an already downloaded folder</span></a></li><li class="toc-se"><a href="#archivi-in-parti"><span class="toc-n">6.3</span><span class="toc-t">Multi-part archives</span></a></li><li class="toc-se"><a href="#password"><span class="toc-n">6.4</span><span class="toc-t">Passwords</span></a></li><li class="toc-se"><a href="#pulizia"><span class="toc-n">6.5</span><span class="toc-t">Deleting archives after extraction</span></a></li><li class="toc-se"><a href="#rar-esterno"><span class="toc-n">6.6</span><span class="toc-t">When rar is needed</span></a></li><li class="toc-ch"><a href="#certificati"><span class="toc-n">7</span><span class="toc-t">Security certificates</span></a></li><li class="toc-se"><a href="#certificati-incompleti"><span class="toc-n">7.1</span><span class="toc-t">Why a note about certificates appears</span></a></li><li class="toc-se"><a href="#opzione-k"><span class="toc-n">7.2</span><span class="toc-t">Forcing with -k</span></a></li><li class="toc-ch"><a href="#siti"><span class="toc-n">8</span><span class="toc-t">Supported sites</span></a></li><li class="toc-se"><a href="#elenco-siti"><span class="toc-n">8.1</span><span class="toc-t">The list</span></a></li><li class="toc-se"><a href="#sito-nuovo"><span class="toc-n">8.2</span><span class="toc-t">Trying a new site</span></a></li><li class="toc-ch"><a href="#recupero"><span class="toc-n">9</span><span class="toc-t">Recovery on a new device</span></a></li><li class="toc-se"><a href="#cosa-c-e"><span class="toc-n">9.1</span><span class="toc-t">What is saved and where</span></a></li><li class="toc-se"><a href="#ripartire"><span class="toc-n">9.2</span><span class="toc-t">Starting over from scratch</span></a></li><li class="toc-se"><a href="#backup-locale"><span class="toc-n">9.3</span><span class="toc-t">A backup that does not depend on GitHub</span></a></li><li class="toc-ch"><a href="#riferimento"><span class="toc-n">10</span><span class="toc-t">Option reference</span></a></li><li class="toc-se"><a href="#ref-download"><span class="toc-n">10.1</span><span class="toc-t">Download</span></a></li><li class="toc-se"><a href="#ref-estrazione"><span class="toc-n">10.2</span><span class="toc-t">Extraction</span></a></li><li class="toc-se"><a href="#ref-diagnostica"><span class="toc-n">10.3</span><span class="toc-t">Diagnostics</span></a></li><li class="toc-se"><a href="#file-usati"><span class="toc-n">10.4</span><span class="toc-t">Files used</span></a></li><li class="toc-se"><a href="#stati-uscita"><span class="toc-n">10.5</span><span class="toc-t">Exit statuses</span></a></li><li class="toc-se"><a href="#esempi"><span class="toc-n">10.6</span><span class="toc-t">Ready-made examples</span></a></li><li class="toc-ch"><a href="#problemi"><span class="toc-n">11</span><span class="toc-t">Troubleshooting</span></a></li><li class="toc-se"><a href="#errori-avvio"><span class="toc-n">11.1</span><span class="toc-t">The program stops immediately</span></a></li><li class="toc-se"><a href="#errori-link"><span class="toc-n">11.2</span><span class="toc-t">A link does not resolve</span></a></li><li class="toc-se"><a href="#errori-download"><span class="toc-n">11.3</span><span class="toc-t">A download fails</span></a></li><li class="toc-se"><a href="#errori-estrazione"><span class="toc-n">11.4</span><span class="toc-t">Extraction fails</span></a></li><li class="toc-se"><a href="#altri-problemi"><span class="toc-n">11.5</span><span class="toc-t">Other situations</span></a></li><li class="toc-se"><a href="#limiti-noti"><span class="toc-n">11.6</span><span class="toc-t">Known limitations</span></a></li><li class="toc-ch"><a href="#glossario"><span class="toc-n">12</span><span class="toc-t">Glossary</span></a></li><li class="toc-se"><a href="#termini"><span class="toc-n">12.1</span><span class="toc-t">Terms</span></a></li><li class="toc-ch"><a href="#index"><span class="toc-n">13</span><span class="toc-t">Index</span></a></li></ul></div></aside>
+    <main class="main"><section class="chapter" id="introduzione"><div class="ch-head"><span class="ch-kick">Chapter 1</span><h2 class="h-ch">Welcome</h2></div>
+
+<section class="sec" id="cos-e" data-index="hoster;JDownloader"><h3 class="h-sec">1.1 · What hoster is</h3>
+<p class="lead"><b>hoster</b> is a terminal program for downloading files from <i>file hosting</i> sites (terabytez, filestore, worldbytez and the like) using your own accounts. It does what you would do by hand in the browser &mdash; signing in with username and password, opening each link, clicking &laquo;download&raquo; &mdash; but for all the links at once, without you having to touch anything.</p>
+<p>It is designed like JDownloader, but without Java: it is <b>a single executable file</b> and does not need anything else installed. In short:</p>
+<figure class="tbl-wrap"><table class="tbl"><thead><tr><th>What it can do</th><th>In practice</th></tr></thead><tbody>
+<tr><td><b>Two files and one command</b></td><td>Write the accounts in <code>account</code> and the links in <code>links</code>, then run <code>./hoster</code>.</td></tr>
+<tr><td><b>Several files at once</b></td><td>Downloads up to 5 files at a time (this can be changed), with a progress bar for each one.</td></tr>
+<tr><td><b>Resumes</b></td><td>If the connection drops it retries on its own; if you interrupt it, run it again with <code>-c</code> and it picks up where it left off.</td></tr>
+<tr><td><b>Extracts</b></td><td>Opens RAR archives (including multi-part and password-protected ones) and ZIP archives, with no additional programs.</td></tr>
+<tr><td><b>The right name</b></td><td>Even when the site shows only a code, the file is saved under its real name.</td></tr>
+<tr><td><b>Built-in guide</b></td><td><code>./hoster --help</code> opens a tabbed guide in the terminal.</td></tr>
+</tbody></table><figcaption class="cap">Table 1.1 — hoster at a glance</figcaption></figure>
+</section>
+
+<section class="sec" id="cosa-non-fa" data-index="premium;captcha;intended use"><h3 class="h-sec">1.2 · What it does not do</h3>
+<p>hoster uses only the &laquo;premium&raquo; route: the one the site offers to those who have a paid account and sign in. <b>It does not bypass captchas, waiting times or limits</b> of free sites. If a site asks you to wait for a countdown, hoster stops and tells you that the account does not appear to be premium.</p>
+<div class="callout c-info"><div class="callout-i">i</div><div><b>Intended use.</b> Downloading, with <b>your own accounts</b>, content you are authorized to download &mdash; for example the images of a Linux distribution &mdash; just as you would with JDownloader.</div></div>
+</section>
+
+<section class="sec" id="come-funziona-in-breve" data-index="how it works;batches"><h3 class="h-sec">1.3 · How it works, in brief</h3>
+<figure class="fig"><svg viewBox="0 0 860 154" xmlns="http://www.w3.org/2000/svg" font-family="Outfit,Segoe UI,Arial,sans-serif" role="img" aria-label="From the two files to download and extraction"><rect width="860" height="154" fill="#f8fafc" rx="12"/>
+<rect x="20" y="30" width="140" height="64" rx="9" fill="#475569"/><text x="90" y="55" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="700" fill="#fff">account + links</text><text x="90" y="74" text-anchor="middle" font-size="10.5" fill="#fff" opacity="0.85">your two files</text>
+<line x1="160" y1="62" x2="192" y2="62" stroke="#0050C0" stroke-width="2.2"/><path d="M184 57 L192 62 L184 67 Z" fill="#0050C0"/>
+<rect x="192" y="30" width="140" height="64" rx="9" fill="#0050C0"/><text x="262" y="55" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="700" fill="#fff">Login</text><text x="262" y="74" text-anchor="middle" font-size="10.5" fill="#fff" opacity="0.85">once per site</text>
+<line x1="332" y1="62" x2="364" y2="62" stroke="#0050C0" stroke-width="2.2"/><path d="M356 57 L364 62 L356 67 Z" fill="#0050C0"/>
+<rect x="364" y="30" width="140" height="64" rx="9" fill="#0050C0"/><text x="434" y="55" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="700" fill="#fff">Direct links</text><text x="434" y="74" text-anchor="middle" font-size="10.5" fill="#fff" opacity="0.85">one for each file</text>
+<line x1="504" y1="62" x2="536" y2="62" stroke="#0050C0" stroke-width="2.2"/><path d="M528 57 L536 62 L528 67 Z" fill="#0050C0"/>
+<rect x="536" y="30" width="140" height="64" rx="9" fill="#3b82f6"/><text x="606" y="55" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="700" fill="#fff">Download</text><text x="606" y="74" text-anchor="middle" font-size="10.5" fill="#fff" opacity="0.85">several files, with resume</text>
+<line x1="676" y1="62" x2="708" y2="62" stroke="#0050C0" stroke-width="2.2"/><path d="M700 57 L708 62 L700 67 Z" fill="#0050C0"/>
+<rect x="708" y="30" width="140" height="64" rx="9" fill="#3b82f6"/><text x="778" y="55" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="700" fill="#fff">Extraction</text><text x="778" y="74" text-anchor="middle" font-size="10.5" fill="#fff" opacity="0.85">if requested with -e</text>
+<text x="430" y="140" text-anchor="middle" font-size="12" fill="#475569">Figure 1.1 — The path of a download with hoster</text></svg></figure>
+<p>hoster reads your accounts and the list of links, signs in to each site only once, works out for each file its <i>direct link</i> (the address the file actually comes from) and downloads. At the end, if you ask it to, it extracts the archives.</p>
+<p>The sites' direct links expire quickly, so hoster works <b>in batches</b>: it takes 5 links (or as many as you specify with <code>-j</code>), works out their direct links, downloads them together and only then moves on to the next 5 (see <a href="#parallelo">How many files at once</a>).</p>
+</section>
+
+<section class="sec" id="a-chi"><h3 class="h-sec">1.4 · How to use this manual</h3>
+<figure class="tbl-wrap"><table class="tbl"><thead><tr><th>If you want to…</th><th>Read</th></tr></thead><tbody>
+<tr><td>Install hoster</td><td>Chapter 2</td></tr>
+<tr><td>Make your first download, step by step</td><td>Chapter 4</td></tr>
+<tr><td>Adjust speed, resuming, folders, messages</td><td>Chapter 5</td></tr>
+<tr><td>Open the downloaded archives</td><td>Chapter 6</td></tr>
+<tr><td>Use a site other than those already tested</td><td>Chapter 8</td></tr>
+<tr><td>Get everything back up and running on another computer</td><td>Chapter 9</td></tr>
+<tr><td>Quickly find an option</td><td>Chapter 10</td></tr>
+<tr><td>Understand an error message</td><td>Chapter 11</td></tr>
+</tbody></table><figcaption class="cap">Table 1.2 — Where to find what</figcaption></figure>
+<p>The <b>Search</b> box at the top of the side contents finds a word anywhere in the manual (the <kbd>/</kbd> key takes you straight there); the <a href="#index">index</a> at the end lists options, files and topics.</p>
+</section>
+
+<section class="sec" id="convenzioni"><h3 class="h-sec">1.5 · Conventions</h3>
+<figure class="tbl-wrap"><table class="tbl"><thead><tr><th>Convention</th><th>Meaning</th></tr></thead><tbody>
+<tr><td><code>./hoster -c</code></td><td>Commands, file names, options and values to be typed exactly as shown.</td></tr>
+<tr><td><span class="ui">risolti: 2  falliti: 0</span></td><td>Text that appears on the screen: messages, summary lines, guide tabs. hoster's own interface is in Italian: this text is shown exactly as it appears, with an English translation where useful.</td></tr>
+<tr><td><kbd>Ctrl</kbd>+<kbd>C</kbd></td><td>Keys to press.</td></tr>
+<tr><td><code>$</code> at the start of a line</td><td>In the dark boxes it marks a command to type in the terminal (do not type the <code>$</code>); lines without <code>$</code> are the program's responses.</td></tr>
+<tr><td>Blue <b>Note</b> box</td><td>Information that helps understanding.</td></tr>
+<tr><td>Green <b>Tip</b> box</td><td>A better or more convenient way of doing something.</td></tr>
+<tr><td>Yellow <b>Warning</b> box</td><td>A behavior that may be surprising or cause data loss.</td></tr>
+</tbody></table><figcaption class="cap">Table 1.3 — The manual's conventions</figcaption></figure>
+<div class="callout c-info"><div class="callout-i">i</div><div><b>Version.</b> This manual describes hoster <b>1.0</b>. How it works internally is described in the <a href="Technical%20Manual.html"><i>Technical Manual</i></a>; the reasons behind the choices made are collected in <a href="https://github.com/nic-fio/HOSTER/blob/main/docs/decisioni-e-storia.md">the project's decisions and history</a> (in Italian). Copyright &copy; 2026 nic-fio, all rights reserved: the code is public so that it can be read and recovered.</div></div>
+</section>
+</section>
+
+<section class="chapter" id="installazione"><div class="ch-head"><span class="ch-kick">Chapter 2</span><h2 class="h-ch">Installation and first run</h2></div>
+
+<section class="sec" id="requisiti" data-index="requirements;Linux;ARM"><h3 class="h-sec">2.1 · Requirements</h3>
+<figure class="tbl-wrap"><table class="tbl"><thead><tr><th>Requirement</th><th>Details</th></tr></thead><tbody>
+<tr><td>Operating system</td><td>64-bit Linux: PCs and tablets with an Intel or AMD processor, or 64-bit ARM devices (for example a Raspberry Pi 4 or 5).</td></tr>
+<tr><td>Account</td><td>A <b>premium</b> account on each site you want to download from.</td></tr>
+<tr><td>Disk space</td><td>As much as the files to download; if you extract the archives, roughly twice that (archives plus contents), unless you use <code>--cleanup</code>.</td></tr>
+<tr><td>Programs</td><td>None. <code>git</code> is needed only if you choose to get hoster with <code>git clone</code>; <code>rar</code>, <code>unrar</code> or <code>7z</code> are optional (chapter 6.6).</td></tr>
+<tr><td>To rebuild it from the code</td><td>Debian or Ubuntu with an Internet connection: the setup script installs the rest (including Go 1.24).</td></tr>
+</tbody></table><figcaption class="cap">Table 2.1 — What you need</figcaption></figure>
+</section>
+
+<section class="sec" id="nel-repository" data-index="executable;git clone;installation"><h3 class="h-sec">2.2 · The ready-made program, with git clone</h3>
+<p>The repository already contains the compiled program, the file <code>hoster</code> (for PCs and tablets with an Intel or AMD processor). Just clone it:</p>
+<pre class="code"><code><span class="p">$</span> git clone https://github.com/nic-fio/HOSTER.git
+<span class="p">$</span> cd HOSTER
+<span class="p">$</span> ./hoster --help</code></pre>
+<p>There is nothing else to install. The cloned folder can directly become your working folder: the personal files (<code>account</code>, <code>links</code>, <code>passwords.txt</code>) and <code>downloads/</code> are excluded from the repository, so they never end up on GitHub by mistake.</p>
+</section>
+
+<section class="sec" id="programma-pronto" data-index="release;binary;uname"><h3 class="h-sec">2.3 · Just the program, from the releases</h3>
+<p>If you do not want to clone, the <a href="https://github.com/nic-fio/HOSTER/releases/latest">releases page on GitHub</a> has two files:</p>
+<figure class="tbl-wrap"><table class="tbl"><thead><tr><th>File</th><th>For</th></tr></thead><tbody>
+<tr><td><code>hoster-linux-amd64</code></td><td>PCs and tablets with an Intel or AMD processor (most of them).</td></tr>
+<tr><td><code>hoster-linux-arm64</code></td><td>64-bit ARM devices, for example a Raspberry Pi 4 or 5.</td></tr>
+</tbody></table><figcaption class="cap">Table 2.2 — The release files</figcaption></figure>
+<p>If you do not know which one you need, the command <code>uname -m</code> tells you: <code>x86_64</code> means amd64, <code>aarch64</code> means arm64. Once the file is downloaded, create a working folder and put it there:</p>
+<ol class="steps"><li>Create the working folder and go into it.</li><li>Move the downloaded file there, naming it simply <code>hoster</code>.</li><li>Make it executable with <code>chmod +x</code> and check that it starts.</li></ol>
+<pre class="code"><code><span class="p">$</span> mkdir ~/hoster &amp;&amp; cd ~/hoster
+<span class="p">$</span> mv ~/Scaricati/hoster-linux-amd64 hoster
+<span class="p">$</span> chmod +x hoster
+<span class="p">$</span> ./hoster --help</code></pre>
+</section>
+
+<section class="sec" id="dal-sorgente" data-index="compiling;setup-dev.sh;make"><h3 class="h-sec">2.4 · From the source code</h3>
+<p>You need a Debian or Ubuntu machine with an Internet connection. The script <code>tools/setup-dev.sh</code> checks for and installs whatever is missing (the Go compiler and a few other packages; it asks for the password for <code>sudo</code>):</p>
+<pre class="code"><code><span class="p">$</span> git clone https://github.com/nic-fio/HOSTER.git
+<span class="p">$</span> cd HOSTER
+<span class="p">$</span> tools/setup-dev.sh --install
+<span class="p">$</span> make
+<span class="p">$</span> make test</code></pre>
+<p><code>make</code> rebuilds the <code>hoster</code> program from the code; <code>make test</code> runs all the automatic checks. You only need this if you want to modify hoster, or to use it on an ARM computer with the code at hand: the ready-made program in the repository is for Intel and AMD processors.</p>
+</section>
+
+<section class="sec" id="dove-lavora" data-index="working folder"><h3 class="h-sec">2.5 · Where it looks for its files</h3>
+<p>hoster looks for <code>account</code>, <code>links</code> and <code>passwords.txt</code> <b>in the folder you run it from</b> (not in the one where the program is), and saves the downloads in <code>downloads/</code> inside that same folder. The simplest way is to keep everything together in one folder and run <code>./hoster</code> from there:</p>
+<pre class="code"><code>HOSTER/
+├── hoster          <span class="cm">the program</span>
+├── account         <span class="cm">your accounts (you create it)</span>
+├── links           <span class="cm">the links to download (you create it)</span>
+├── passwords.txt   <span class="cm">archive passwords (optional)</span>
+└── downloads/      <span class="cm">the files arrive here (created by hoster)</span></code></pre>
+<p>With the options <a href="#opt-a"><code>-a</code></a>, <a href="#opt-i"><code>-i</code></a>, <a href="#opt-pwfile"><code>--pwfile</code></a> and <a href="#opt-d"><code>-d</code></a> you can specify different files and folders.</p>
+</section>
+
+<section class="sec" id="aggiornare" data-index="updating;git pull"><h3 class="h-sec">2.6 · Updating hoster</h3>
+<p>If you cloned the repository, to move to the latest version all you need is, from the hoster folder:</p>
+<pre class="code"><code><span class="p">$</span> git pull</code></pre>
+<p>The ready-made program is in the repository, so it arrives updated together with everything else. Your personal files are not touched: they are not part of the repository. If instead you downloaded the program from the releases, download the file of the new version and replace the old <code>hoster</code> (remembering <code>chmod +x</code>). To find out which version you have, look at the last line of the guide in text form: <code>./hoster --help | tail -n 1</code> shows, for example, <span class="ui">hoster 1.0</span>.</p>
+</section>
+</section>
+
+<section class="chapter" id="guida-integrata"><div class="ch-head"><span class="ch-kick">Chapter 3</span><h2 class="h-ch">The built-in guide</h2></div>
+
+<section class="sec" id="aprire-guida" data-index="--help;tabbed guide"><h3 class="h-sec">3.1 · Opening the guide</h3>
+<p class="lead">Help is always at hand, even without this manual.</p>
+<p><code>./hoster --help</code> (or <code>-h</code>, <code>-help</code>, or simply <code>./hoster help</code>) opens a tabbed guide in the terminal with all the options, the known sites and some ready-made examples. The guide does not download anything: you close it with <kbd>q</kbd> and the program ends.</p>
+</section>
+
+<section class="sec" id="schede"><h3 class="h-sec">3.2 · The tabs</h3>
+<figure class="tbl-wrap"><table class="tbl"><thead><tr><th>Tab</th><th>Contents</th></tr></thead><tbody>
+<tr><td><span class="ui">1 Info</span></td><td>Name, usage and description of the program.</td></tr>
+<tr><td><span class="ui">2 Download</span></td><td>The options for downloading (chapter 10.1).</td></tr>
+<tr><td><span class="ui">3 Estrazione</span></td><td>The options for opening archives (&laquo;Estrazione&raquo; means Extraction; chapter 10.2).</td></tr>
+<tr><td><span class="ui">4 Diagnostica</span></td><td>Tests, messages and help (&laquo;Diagnostica&raquo; means Diagnostics; chapter 10.3).</td></tr>
+<tr><td><span class="ui">5 Host</span></td><td>The known sites, with the tested ones marked as <span class="ui">(testato)</span>, that is &laquo;tested&raquo; (chapter 8).</td></tr>
+<tr><td><span class="ui">6 Esempi</span></td><td>Ready-made commands for the most common cases (&laquo;Esempi&raquo; means Examples; chapter 10.6).</td></tr>
+</tbody></table><figcaption class="cap">Table 3.1 — The guide's tabs</figcaption></figure>
+</section>
+
+<section class="sec" id="tasti" data-index="keys"><h3 class="h-sec">3.3 · The keys</h3>
+<figure class="tbl-wrap"><table class="tbl"><thead><tr><th>Keys</th><th>Effect</th></tr></thead><tbody>
+<tr><td><kbd>←</kbd> <kbd>→</kbd>, <kbd>Tab</kbd>, <kbd>h</kbd> <kbd>l</kbd>, <kbd>Invio</kbd></td><td>Previous / next tab (<kbd>Shift</kbd>+<kbd>Tab</kbd> goes back).</td></tr>
+<tr><td><kbd>1</kbd> … <kbd>6</kbd></td><td>Goes straight to that tab.</td></tr>
+<tr><td><kbd>↑</kbd> <kbd>↓</kbd>, <kbd>j</kbd> <kbd>k</kbd></td><td>Scrolls by one line.</td></tr>
+<tr><td><kbd>PagSu</kbd> <kbd>PagGiù</kbd>, <kbd>b</kbd> <kbd>Spazio</kbd></td><td>Scrolls by one page.</td></tr>
+<tr><td><kbd>g</kbd> <kbd>G</kbd>, <kbd>Home</kbd> <kbd>Fine</kbd></td><td>Start / end of the tab.</td></tr>
+<tr><td><kbd>q</kbd>, <kbd>Esc</kbd>, <kbd>Ctrl</kbd>+<kbd>C</kbd></td><td>Exits.</td></tr>
+</tbody></table><figcaption class="cap">Table 3.2 — The keys of the tabbed guide</figcaption></figure>
+</section>
+
+<section class="sec" id="guida-testo" data-index="less;PAGER;NO_COLOR"><h3 class="h-sec">3.4 · When the guide appears as text</h3>
+<p>If the terminal is too small (fewer than 44 columns or 10 rows), the same guide appears as text in the format of manual pages, which you can page through with <code>less</code> (or with the program named in the <code>PAGER</code> variable). If the output does not go to a screen, for example</p>
+<pre class="code"><code><span class="p">$</span> ./hoster --help &gt; guida.txt</code></pre>
+<p>the guide is written as plain text, without colors: handy for printing it or keeping it aside. To get the guide without colors on the screen too, the <code>NO_COLOR</code> variable is enough: <code>NO_COLOR=1 ./hoster --help</code>.</p>
+</section>
+</section>
+
+<section class="chapter" id="primi-passi"><div class="ch-head"><span class="ch-kick">Chapter 4</span><h2 class="h-ch">First steps</h2></div>
+
+<section class="sec" id="percorso"><h3 class="h-sec">4.1 · The path</h3>
+<p class="lead">From the freshly installed program to the first downloaded file, in four steps.</p>
+<ol class="steps">
+<li><b>Write the accounts</b> in the <code>account</code> file, one line per site (chapter 4.2).</li>
+<li><b>Write the links</b> in the <code>links</code> file, one per line (chapter 4.3).</li>
+<li><b>Try without downloading</b> with <code>./hoster --dry-run</code>, to check accounts and links (chapter 4.4).</li>
+<li><b>Download</b> with <code>./hoster</code>, or download and extract with <code>./hoster -e -p LAPASSWORD</code> (chapter 4.5).</li>
+</ol>
+</section>
+
+<section class="sec" id="file-account" data-index="account (file);credentials;account.example"><h3 class="h-sec">4.2 · The <code>account</code> file</h3>
+<p>One line for each site, with domain, username and password separated by colons:</p>
+<pre class="code"><code><span class="cm"># Lines starting with # are comments.</span>
+terabytez.org:mariorossi:la-mia-password
+filestore.me:mrossi;altra:password;con:simboli</code></pre>
+<ul class="ul">
+<li>Instead of the colon <code>:</code> the semicolon <code>;</code> also works, even mixed.</li>
+<li>Only the first two separators count: <b>the password is the whole rest of the line</b>, so it can contain <code>:</code>, <code>;</code> and any other character. In the example, the password for the second site is <code>altra:password;con:simboli</code>.</li>
+<li>Do not put spaces around the separators: a space after the second separator would become part of the password.</li>
+<li>The domain can also be written without its final part: <code>terabytez:utente:password</code> (utente = username) applies to both <code>terabytez.org</code> and <code>terabytez.com</code>. You can also write <code>www.</code> in front or the full address with <code>https://</code>: they are ignored.</li>
+<li>Blank lines and lines starting with <code>#</code> are skipped.</li>
+</ul>
+<p>The repository contains a template, <code>account.example</code>: copy it to <code>account</code> and replace the data.</p>
+<pre class="code"><code><span class="p">$</span> cp account.example account
+<span class="p">$</span> nano account
+<span class="p">$</span> chmod 600 account</code></pre>
+<div class="callout c-warn"><div class="callout-i">!</div><div><b>Warning.</b> The <code>account</code> file contains your passwords in plain text. Do not share it and do not upload it to GitHub: hoster's repository is configured to ignore it, but a copy placed elsewhere is not protected. It is best to make the file readable only by you: <code>chmod 600 account</code>.</div></div>
+</section>
+
+<section class="sec" id="file-links" data-index="links (file);links.example"><h3 class="h-sec">4.3 · The <code>links</code> file</h3>
+<p>One link per line, just as you copy it from the browser. Blank lines and lines starting with <code>#</code> are skipped, and if the same link appears twice it is downloaded only once.</p>
+<pre class="code"><code><span class="cm"># Kali, complete set</span>
+https://terabytez.org/abc123def456/kali-linux.part01.rar
+https://terabytez.org/ghi789jkl012/kali-linux.part02.rar
+https://filestore.me/nhail4vmw015</code></pre>
+<p>The links can be from different sites, mixed together: hoster signs in to each one the first time it needs to. The files are processed in the order in which they appear. Here too there is a template, <code>links.example</code>.</p>
+<div class="callout c-ok"><div class="callout-i">+</div><div><b>Tip.</b> To keep a link aside without downloading it, put a <code>#</code> in front of it: it stays in the file but is skipped.</div></div>
+</section>
+
+<section class="sec" id="prova-senza-scaricare" data-index="trial;check;--dry-run"><h3 class="h-sec">4.4 · Trying without downloading</h3>
+<p>Before a long download it is worth checking that sign-in and links work. With <code>--dry-run</code> hoster signs in to the sites, works out the direct links and shows them, without downloading anything:</p>
+<pre class="code"><code><span class="p">$</span> ./hoster --dry-run
+✓ kali-linux.part01.rar
+  https://terabytez.org/abc123def456/kali-linux.part01.rar
+✓ debian-12.iso
+  https://filestore.me/nhail4vmw015
+
+risolti: 2  falliti: 0</code></pre>
+<p>Each line with <code>✓</code> is a file ready to be downloaded, with its real name and the address it will come from (with premium accounts this is often the same as the original link, because the site sends the file directly). The last line counts the links resolved (risolti) and failed (falliti). A line with <code>✗</code> says what is wrong, for example (&laquo;no account in the 'account' file for altrosito.com&raquo;):</p>
+<pre class="code"><code>✗ https://altrosito.com/abc123
+  nessun account nel file 'account' per altrosito.com</code></pre>
+<p>The <a href="#problemi">Troubleshooting</a> chapter explains every message.</p>
+</section>
+
+<section class="sec" id="primo-download" data-index="progress bars;downloads"><h3 class="h-sec">4.5 · The first download</h3>
+<pre class="code"><code><span class="p">$</span> ./hoster
+ ✓ kali-linux.part01.rar  1.2G
+ ⬇ kali-linux.part02.rar        ▕████████████░░░░░░░░░░░░░░░░▏ 43%  512M/1.2G  92.0M/s  7s
+ ⬇ kali-linux.part03.rar        ▕█████▉░░░░░░░░░░░░░░░░░░░░░░▏ 21%  250M/1.2G  88.0M/s  11s
+ 2 in corso · 1 completati</code></pre>
+<figure class="tbl-wrap"><table class="tbl"><thead><tr><th>Element</th><th>Meaning</th></tr></thead><tbody>
+<tr><td><span class="ui">⬇ nome</span></td><td>A file in progress (nome is its name): each file has its own line.</td></tr>
+<tr><td>Bar and percentage</td><td>How much is left until the end of the file.</td></tr>
+<tr><td><span class="ui">512M/1.2G</span></td><td>How much has been downloaded out of the total.</td></tr>
+<tr><td><span class="ui">92.0M/s</span></td><td>Current speed of that file.</td></tr>
+<tr><td><span class="ui">7s</span></td><td>Estimated time remaining.</td></tr>
+<tr><td><span class="ui">✓ nome  1.2G</span></td><td>A finished file, with its size: the bar turns into this line.</td></tr>
+<tr><td><span class="ui">2 in corso · 1 completati</span></td><td>The overall count (in corso = in progress, completati = completed); if something fails, <span class="ui">· N falliti</span> (N failed) also appears.</td></tr>
+</tbody></table><figcaption class="cap">Table 4.1 — How to read the screen during the download</figcaption></figure>
+<p>At the end the summary appears, with the number of files, the total size, the time taken and the average speed (media), then the count of downloaded (scaricati) and failed (falliti) files:</p>
+<pre class="code"><code>✓ 15 file · 17.6G in 3m21s · media 89.7M/s
+scaricati: 15  falliti: 0</code></pre>
+<p>The files are in <code>downloads/</code>. While a file is in progress it is called <code>NOME.part</code> (where NOME is its name); it takes its final name only when it is complete and checked.</p>
+<div class="callout c-ok"><div class="callout-i">+</div><div><b>Tip.</b> To download and extract in one go: <code>./hoster -e -p LAPASSWORD</code>. See <a href="#estrarre">Extracting archives</a>.</div></div>
+</section>
+</section>
+
+<section class="chapter" id="scaricare"><div class="ch-head"><span class="ch-kick">Chapter 5</span><h2 class="h-ch">Downloading</h2></div>
+
+<section class="sec" id="parallelo" data-index="parallel;batches;-j"><h3 class="h-sec">5.1 · How many files at once</h3>
+<p>By default hoster downloads <b>5 files at a time</b>. With <code>-j</code> you choose a different number: <code>-j 2</code> for a slow connection or for a site that does not like too many simultaneous downloads, <code>-j 10</code> if the line can take it.</p>
+<p>The same number also sets the size of the batches: hoster works out the direct links of a batch, downloads all of it and moves on to the next batch only when the last file of the batch has finished. This way the direct links are used straight away, before they expire.</p>
+<figure class="fig"><svg viewBox="0 0 860 190" xmlns="http://www.w3.org/2000/svg" font-family="Outfit,Segoe UI,Arial,sans-serif" role="img" aria-label="Twelve links processed in batches of five"><rect width="860" height="190" fill="#f8fafc" rx="12"/>
+<rect x="20" y="20" width="250" height="118" rx="10" fill="#eff6ff" stroke="#0050C0" stroke-width="1.5"/><text x="145" y="44" text-anchor="middle" font-size="13" font-weight="700" fill="#003a90">Batch 1 · links 1–5</text>
+<rect x="35" y="60" width="36" height="36" rx="6" fill="#0050C0"/><text x="53" y="83" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">1</text>
+<rect x="79" y="60" width="36" height="36" rx="6" fill="#0050C0"/><text x="97" y="83" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">2</text>
+<rect x="123" y="60" width="36" height="36" rx="6" fill="#0050C0"/><text x="141" y="83" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">3</text>
+<rect x="167" y="60" width="36" height="36" rx="6" fill="#0050C0"/><text x="185" y="83" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">4</text>
+<rect x="211" y="60" width="36" height="36" rx="6" fill="#0050C0"/><text x="229" y="83" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">5</text>
+<text x="145" y="122" text-anchor="middle" font-size="11" fill="#475569">direct links, then 5 downloads at once</text>
+<line x1="270" y1="79" x2="305" y2="79" stroke="#0050C0" stroke-width="2.2"/><path d="M297 74 L305 79 L297 84 Z" fill="#0050C0"/>
+<rect x="305" y="20" width="250" height="118" rx="10" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/><text x="430" y="44" text-anchor="middle" font-size="13" font-weight="700" fill="#003a90">Batch 2 · links 6–10</text>
+<rect x="320" y="60" width="36" height="36" rx="6" fill="#3b82f6"/><text x="338" y="83" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">6</text>
+<rect x="364" y="60" width="36" height="36" rx="6" fill="#3b82f6"/><text x="382" y="83" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">7</text>
+<rect x="408" y="60" width="36" height="36" rx="6" fill="#3b82f6"/><text x="426" y="83" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">8</text>
+<rect x="452" y="60" width="36" height="36" rx="6" fill="#3b82f6"/><text x="470" y="83" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">9</text>
+<rect x="496" y="60" width="36" height="36" rx="6" fill="#3b82f6"/><text x="514" y="83" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">10</text>
+<text x="430" y="122" text-anchor="middle" font-size="11" fill="#475569">starts when batch 1 has finished</text>
+<line x1="555" y1="79" x2="590" y2="79" stroke="#0050C0" stroke-width="2.2"/><path d="M582 74 L590 79 L582 84 Z" fill="#0050C0"/>
+<rect x="590" y="20" width="250" height="118" rx="10" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/><text x="715" y="44" text-anchor="middle" font-size="13" font-weight="700" fill="#003a90">Batch 3 · links 11–12</text>
+<rect x="605" y="60" width="36" height="36" rx="6" fill="#93c5fd"/><text x="623" y="83" text-anchor="middle" font-size="13" font-weight="700" fill="#003a90">11</text>
+<rect x="649" y="60" width="36" height="36" rx="6" fill="#93c5fd"/><text x="667" y="83" text-anchor="middle" font-size="13" font-weight="700" fill="#003a90">12</text>
+<text x="715" y="122" text-anchor="middle" font-size="11" fill="#475569">the last batch may be smaller</text>
+<text x="430" y="172" text-anchor="middle" font-size="12" fill="#475569">Figure 5.1 — With -j 5, twelve links are processed in three batches</text></svg></figure>
+</section>
+
+<section class="sec" id="connessioni" data-index="connections per file;segments;-s"><h3 class="h-sec">5.2 · Connections per file</h3>
+<p>Each file is downloaded over a single connection, which is what premium accounts usually allow. If a site allows several connections on the same file, <code>-s 4</code> splits each file into 4 pieces downloaded together. This applies only to files of at least 1 MB and only if the site accepts downloads &laquo;in pieces&raquo;; otherwise hoster uses a single connection anyway. The file still has just one bar even with several connections.</p>
+</section>
+
+<section class="sec" id="ripresa" data-index="resume;-c;interruption;attempts"><h3 class="h-sec">5.3 · Interruptions and resuming</h3>
+<p>If the connection drops during a file, hoster <b>retries on its own</b> up to 5 times (option <code>--retries</code>), waiting 2 seconds between one attempt and the next (<code>--retry-wait</code>), and restarts from the point it had reached, without starting over from the beginning when the site allows it.</p>
+<p>If instead you interrupt the program yourself (<kbd>Ctrl</kbd>+<kbd>C</kbd>), or the computer shuts down, run it again with <code>-c</code>:</p>
+<pre class="code"><code><span class="p">$</span> ./hoster -c</code></pre>
+<p>Half-finished files (<code>.part</code>) resume from where they had got to, if the site accepts downloads &laquo;in pieces&raquo;; otherwise they start again from zero.</p>
+<figure class="tbl-wrap"><table class="tbl"><thead><tr><th>Situation in <code>downloads/</code></th><th>Without <code>-c</code></th><th>With <code>-c</code></th></tr></thead><tbody>
+<tr><td>File already complete</td><td>Skipped (and counted among the downloaded ones)</td><td><b>Downloaded again</b></td></tr>
+<tr><td>Half-finished file (<code>NOME.part</code>)</td><td>Starts again from zero</td><td>Resumes from where it had got to</td></tr>
+<tr><td>File missing</td><td>Downloaded</td><td>Downloaded</td></tr>
+</tbody></table><figcaption class="cap">Table 5.1 — What happens to files already present</figcaption></figure>
+<div class="callout c-warn"><div class="callout-i">!</div><div><b>Good to know.</b> With <code>-c</code> files that are already complete are downloaded again as well. If the list contains files that have already finished, it is best to remove them from <code>links</code> (or comment them out with <code>#</code>) before running again with <code>-c</code>.</div></div>
+</section>
+
+<section class="sec" id="link-scaduti" data-index="expired link"><h3 class="h-sec">5.4 · Expired links</h3>
+<p>A direct link is valid only for a short time. If it expires while the file is queued or half-way through, the site responds with a refusal; hoster notices, goes back to the original page of the file, works out a new link and carries on. It does this up to 2 times per file and reports it with a line (&laquo;note: direct link expired, regenerating it&raquo;):</p>
+<pre class="code"><code>nota: link diretto scaduto, lo rigenero (kali-linux.part07.rar)</code></pre>
+<p>You do not need to do anything: the file is not counted as failed.</p>
+</section>
+
+<section class="sec" id="nomi-e-doppioni" data-index="file name;duplicates;duplicate"><h3 class="h-sec">5.5 · File names and duplicates</h3>
+<p>Some sites put the file name in the link (<code>…/kali-linux.part01.rar</code>), others only a code (<code>https://filestore.me/nhail4vmw015</code>). hoster looks for the real name in the file's page, in the direct link and finally in what the server declares at the start of the download, and always saves under the real name.</p>
+<p>If two links lead to the same file (for example the same archive on two different sites), the second one is skipped with the line <span class="ui">• nome  (duplicato, ignorato)</span>, that is &laquo;duplicate, ignored&raquo;.</p>
+</section>
+
+<section class="sec" id="banda" data-index="bandwidth;speed;--rate"><h3 class="h-sec">5.6 · Limiting bandwidth</h3>
+<p><code>--rate</code> sets an overall limit, valid for all downloads together:</p>
+<pre class="code"><code><span class="p">$</span> ./hoster --rate 2M</code></pre>
+<p>The units are <code>k</code>, <code>M</code>, <code>G</code> and <code>T</code> (lowercase too) and they mean bytes per second: <code>2M</code> is about 2 megabytes per second, that is about 16 megabits. Decimals are allowed (<code>1.5M</code>) and a number without a unit is in bytes. <code>0</code>, the default value, means no limit.</p>
+</section>
+
+<section class="sec" id="rete-lenta" data-index="--timeout;slow network"><h3 class="h-sec">5.7 · Slow or unstable networks</h3>
+<p><code>--timeout</code> (60 seconds) is the maximum time to wait for a server to respond at the start of a download. It does not limit how long the download takes: a file of many gigabytes can take as long as it needs. On a very slow network it can be raised, for example <code>--timeout 120</code>, together with <code>--retries 10</code>:</p>
+<pre class="code"><code><span class="p">$</span> ./hoster --timeout 120 --retries 10 --retry-wait 10</code></pre>
+</section>
+
+<section class="sec" id="altra-cartella" data-index="-d;-i;destination folder"><h3 class="h-sec">5.8 · Another folder or another list</h3>
+<pre class="code"><code><span class="p">$</span> ./hoster -i kali.txt -d /media/disco/iso</code></pre>
+<p>Uses the list <code>kali.txt</code> instead of <code>links</code> and saves to <code>/media/disco/iso</code> (created if it does not exist). In the same way <code>-a</code> specifies another accounts file.</p>
+</section>
+
+<section class="sec" id="messaggi" data-index="reduced output;-v;-qe;-qa;colors;NO_COLOR"><h3 class="h-sec">5.9 · More or fewer messages</h3>
+<figure class="tbl-wrap"><table class="tbl"><thead><tr><th>How</th><th>What you see</th></tr></thead><tbody>
+<tr><td>Normal</td><td>Bars, lines for finished files, notes, errors for individual files and summary.</td></tr>
+<tr><td><code>-v</code></td><td>In addition, for each file, the direct link found (lines with <code>→</code>).</td></tr>
+<tr><td><code>-qe</code></td><td>No bars or messages for individual files. What remains: errors that stop the program, the final count <span class="ui">scaricati/falliti</span> (downloaded/failed) and the extraction messages.</td></tr>
+<tr><td><code>-qa</code></td><td>Like <code>-qe</code>, without even the final count.</td></tr>
+<tr><td><code>NO_COLOR=1 ./hoster</code></td><td>Everything as usual, but without colors.</td></tr>
+</tbody></table><figcaption class="cap">Table 5.2 — How much hoster says while it works</figcaption></figure>
+<p>When the output does not go to a terminal (for example if you send it to a file) the bars do not appear: in their place there are simple lines of text, better suited to a log file.</p>
+</section>
+</section>
+
+<section class="chapter" id="estrarre"><div class="ch-head"><span class="ch-kick">Chapter 6</span><h2 class="h-ch">Extracting archives</h2></div>
+
+<section class="sec" id="estrarre-dopo" data-index="-e;extraction;RAR;ZIP"><h3 class="h-sec">6.1 · Downloading and extracting</h3>
+<pre class="code"><code><span class="p">$</span> ./hoster -e -p LAPASSWORD</code></pre>
+<p>With <code>-e</code>, once the downloads have finished, hoster extracts all the RAR and ZIP archives it finds in the download folder, into that same folder:</p>
+<pre class="code"><code>== estrazione ==
+• kali-linux.part01.rar
+  ✓ estratto (integrato, password trovata)</code></pre>
+<p>For each archive the name and the outcome appear (&laquo;estratto&raquo; means extracted, &laquo;password trovata&raquo; password found): <span class="ui">integrato</span> (built-in) means that hoster did it on its own, <span class="ui">esterno (rar)</span> (external) that it got help from an installed program (chapter 6.6).</p>
+<div class="callout c-warn"><div class="callout-i">!</div><div><b>Warning.</b> If the folder already contains a file with the same name as one inside the archive, it is replaced.</div></div>
+</section>
+
+<section class="sec" id="estrarre-solo" data-index="--extract-only"><h3 class="h-sec">6.2 · Extracting an already downloaded folder</h3>
+<pre class="code"><code><span class="p">$</span> ./hoster --extract-only downloads -p LAPASSWORD</code></pre>
+<p>It does not download anything and does not need <code>account</code> or <code>links</code>: it extracts the archives in <code>downloads</code> and exits. <code>--pwfile</code> and <code>--cleanup</code> apply as well.</p>
+</section>
+
+<section class="sec" id="archivi-in-parti" data-index="multi-part archives;multi-volume"><h3 class="h-sec">6.3 · Multi-part archives</h3>
+<p>A large archive is often split into parts: <code>nome.part01.rar</code>, <code>nome.part02.rar</code>… hoster recognizes the set and extracts it only once, starting from the first part. <b>All</b> the parts must be in the same folder: if one is missing, the extraction of that set fails (the others carry on).</p>
+</section>
+
+<section class="sec" id="password" data-index="password;passwords.txt;-p;--pwfile"><h3 class="h-sec">6.4 · Passwords</h3>
+<p>For each archive hoster tries, in this order:</p>
+<ol class="steps">
+<li><b>No password</b> (many archives do not have one).</li>
+<li><b>The password given with <code>-p</code></b>, if any.</li>
+<li><b>The passwords in the <code>passwords.txt</code> file</b>, one per line, from top to bottom (blank lines and lines with <code>#</code> are skipped). The file is optional; <code>--pwfile</code> specifies a different one.</li>
+</ol>
+<p>The final message says whether a password was needed (<span class="ui">password trovata</span>, password found) but not which one, so that it does not remain written on the screen.</p>
+<div class="callout c-ok"><div class="callout-i">+</div><div><b>Tip.</b> If you often download archives with the same passwords, write them in <code>passwords.txt</code>: you will no longer need to give them with <code>-p</code>. Like <code>account</code>, this file also stays out of the repository.</div></div>
+</section>
+
+<section class="sec" id="pulizia" data-index="--cleanup"><h3 class="h-sec">6.5 · Deleting archives after extraction</h3>
+<p>With <code>--cleanup</code>, after a successful extraction hoster deletes all the parts of that set (including the <code>.rev</code> recovery files) and reports it with <span class="ui">· archivi del set rimossi</span> (set archives removed). If the extraction fails, it deletes nothing.</p>
+</section>
+
+<section class="sec" id="rar-esterno" data-index="rar;unrar;7z;.rev"><h3 class="h-sec">6.6 · When <code>rar</code> is needed</h3>
+<p>hoster extracts RAR and ZIP on its own, without external programs. In a few rare cases this is not enough: RAR archives in unusual formats, password-protected ZIPs, damaged parts to be repaired with the <code>.rev</code> files. In those cases, if <code>rar</code>, <code>unrar</code> or <code>7z</code> are installed on the computer, hoster uses them automatically and the message says <span class="ui">esterno (rar)</span> (or the name of the program used). On Debian:</p>
+<pre class="code"><code><span class="p">$</span> sudo apt install 7zip
+<span class="cm"># or</span>
+<span class="p">$</span> sudo apt install unrar</code></pre>
+<div class="callout c-info"><div class="callout-i">i</div><div><b>Note.</b> hoster does not repair damaged parts on its own. If an extraction fails because of a corrupted part and the <code>.rev</code> files are there, you can repair it by hand with <code>rar rc</code>, or download that part again.</div></div>
+</section>
+</section>
+
+<section class="chapter" id="certificati"><div class="ch-head"><span class="ch-kick">Chapter 7</span><h2 class="h-ch">Security certificates</h2></div>
+
+<section class="sec" id="certificati-incompleti" data-index="certificate;TLS;https"><h3 class="h-sec">7.1 · Why a note about certificates appears</h3>
+<p>Every secure connection (<code>https</code>) relies on a certificate that the site presents to prove who it is. Some of the servers that downloads come from (for example those of terabytez) present an <i>incomplete</i> certificate: browsers accept it anyway, stricter programs do not. hoster notices this and, <b>only for that server</b>, carries on without that check, warning you with a line (&laquo;note: … has an incomplete certificate chain — TLS verification skipped for this host&raquo;):</p>
+<pre class="code"><code>nota: fs12.terabytez.org:183 ha una catena di certificati incompleta — verifica TLS saltata per questo host</code></pre>
+<p>All other sites are still verified, and a certificate that has expired or was issued to a different site is rejected in any case. You do not need to do anything.</p>
+</section>
+
+<section class="sec" id="opzione-k" data-index="-k;--insecure"><h3 class="h-sec">7.2 · Forcing with <code>-k</code></h3>
+<p>The <code>-k</code> option (or <code>--insecure</code>) skips the check for <b>all</b> sites.</p>
+<div class="callout c-warn"><div class="callout-i">!</div><div><b>Warning.</b> Normally <code>-k</code> is not needed: keep it for exceptional cases, knowing that it removes a protection from all connections, including the one that carries your username and password.</div></div>
+</section>
+</section>
+
+<section class="chapter" id="siti"><div class="ch-head"><span class="ch-kick">Chapter 8</span><h2 class="h-ch">Supported sites</h2></div>
+
+<section class="sec" id="elenco-siti" data-index="supported sites;XFileSharing;terabytez;filestore"><h3 class="h-sec">8.1 · The list</h3>
+<p>Many file hosting sites use the same server-side program, <i>XFileSharing</i>: that is why a single mechanism covers almost all of them. To use one, you just add its line to the <code>account</code> file.</p>
+<figure class="tbl-wrap"><table class="tbl"><thead><tr><th>Site</th><th>Status</th></tr></thead><tbody>
+<tr><td><code>terabytez.org</code></td><td><span class="badge">tested</span> sign-in, direct links, complete download and extraction of the Kali set (15 parts, about 18 GB).</td></tr>
+<tr><td><code>filestore.me</code></td><td><span class="badge">tested</span> links with a code instead of the name: real name obtained from the server.</td></tr>
+<tr><td><code>worldbytez.com</code>, <code>ddownload.com</code>, <code>clicknupload.to</code>, <code>dropapk.to</code>, <code>send.cm</code>, <code>userupload.net</code>, <code>usersdrive.com</code>, <code>uploadrar.com</code>, <code>file-upload.org</code></td><td>Same system, they should work the same way; not tested yet.</td></tr>
+</tbody></table><figcaption class="cap">Table 8.1 — The known sites (the same as in the guide's <span class="ui">Host</span> tab)</figcaption></figure>
+</section>
+
+<section class="sec" id="sito-nuovo" data-index="new site;--debug"><h3 class="h-sec">8.2 · Trying a new site</h3>
+<ol class="steps">
+<li><b>Add the site's line</b> to <code>account</code> and one of its links to <code>links</code>.</li>
+<li><b>Try without downloading</b>: <code>./hoster --dry-run</code>. If <code>✓</code> appears, the site works: you can download normally.</li>
+<li><b>If <code>✗</code> appears</b>, run again with <code>./hoster --dry-run --debug dbg</code>: hoster saves in the <code>dbg</code> folder the pages it received at each step. With those pages the program can be adapted to the site (the <a href="Technical%20Manual.html">Technical Manual</a> explains how).</li>
+</ol>
+<div class="callout c-warn"><div class="callout-i">!</div><div><b>Warning.</b> The pages saved by <code>--debug</code> are the ones you see as a signed-in user: they may contain your username, your email or data from your account. Do not publish them without having looked at them.</div></div>
+</section>
+</section>
+
+<section class="chapter" id="recupero"><div class="ch-head"><span class="ch-kick">Chapter 9</span><h2 class="h-ch">Recovery on a new device</h2></div>
+
+<section class="sec" id="cosa-c-e" data-index="backup;recovery"><h3 class="h-sec">9.1 · What is saved and where</h3>
+<p class="lead">If the tablet or the computer breaks down, everything can be set up again from scratch in a few minutes.</p>
+<figure class="tbl-wrap"><table class="tbl"><thead><tr><th>What</th><th>Where</th><th>How to recover it</th></tr></thead><tbody>
+<tr><td>Code, tests, manuals, tools, the whole history of changes</td><td>Public repository <a href="https://github.com/nic-fio/HOSTER">github.com/nic-fio/HOSTER</a></td><td><code>git clone</code></td></tr>
+<tr><td>Ready-to-use program (Intel/AMD)</td><td>In the repository, file <code>hoster</code></td><td><code>git clone</code></td></tr>
+<tr><td>Ready-made program for ARM</td><td><a href="https://github.com/nic-fio/HOSTER/releases/latest">Releases</a></td><td>Download it from the browser</td></tr>
+<tr><td>These manuals</td><td><a href="https://nic-fio.github.io/HOSTER/">nic-fio.github.io/HOSTER</a> and <code>docs/</code> in the repository</td><td>Online, or by opening the files in the browser</td></tr>
+<tr><td><code>account</code>, <code>links</code>, <code>passwords.txt</code></td><td><b>Nowhere online</b>, by choice</td><td>Write them again, or from a private copy of your own</td></tr>
+</tbody></table><figcaption class="cap">Table 9.1 — Where everything is</figcaption></figure>
+</section>
+
+<section class="sec" id="ripartire"><h3 class="h-sec">9.2 · Starting over from scratch</h3>
+<ol class="steps">
+<li><b>Get the project</b>: <code>git clone https://github.com/nic-fio/HOSTER.git</code>, then <code>cd HOSTER</code>.</li>
+<li><b>Recreate the personal files</b>: <code>cp account.example account</code>, write in your data (for example with <code>nano account</code>) and protect it with <code>chmod 600 account</code>. Do the same for <code>links</code> and, if needed, <code>passwords.txt</code>.</li>
+<li><b>Check</b> with <code>./hoster --dry-run</code>. Done: the program is already in the repository.</li>
+</ol>
+<pre class="code"><code><span class="p">$</span> git clone https://github.com/nic-fio/HOSTER.git
+<span class="p">$</span> cd HOSTER
+<span class="p">$</span> cp account.example account
+<span class="p">$</span> nano account
+<span class="p">$</span> chmod 600 account
+<span class="p">$</span> ./hoster --dry-run</code></pre>
+<p>If you also want to be able to modify and rebuild hoster, prepare the machine (it installs Go and the rest, and asks for <code>sudo</code>) and check that everything works:</p>
+<pre class="code"><code><span class="p">$</span> tools/setup-dev.sh --install
+<span class="p">$</span> make
+<span class="p">$</span> make test</code></pre>
+</section>
+
+<section class="sec" id="backup-locale" data-index="backup.sh;bundle"><h3 class="h-sec">9.3 · A backup that does not depend on GitHub</h3>
+<p><code>tools/backup.sh</code> saves the entire project, with its whole history, into a single file that can be restored even without a network:</p>
+<pre class="code"><code><span class="p">$</span> tools/backup.sh /media/chiavetta
+<span class="p">$</span> git clone /media/chiavetta/hoster-2026-09-24.bundle HOSTER</code></pre>
+<p>The file name contains the date of the backup. With <code>--personal</code> it also saves, alongside it, an archive with <code>account</code>, <code>links</code> and <code>passwords.txt</code>:</p>
+<pre class="code"><code><span class="p">$</span> tools/backup.sh --personal /media/chiavetta</code></pre>
+<div class="callout c-warn"><div class="callout-i">!</div><div><b>Warning.</b> The archive of personal files contains the passwords in plain text. Keep it only on media of your own (a USB stick, an external disk) and never on public services. A convenient alternative is to keep the sites' credentials in your password manager.</div></div>
+</section>
+</section>
+
+<section class="chapter" id="riferimento"><div class="ch-head"><span class="ch-kick">Chapter 10</span><h2 class="h-ch">Option reference</h2></div>
+<p class="lead">All the options, with the value used if you do not specify them. They can be written with one or two dashes: <code>-dry-run</code> and <code>--dry-run</code> are the same thing. Options can be combined freely: <code>./hoster -j 3 --rate 5M -e -p PW</code>.</p>
+
+<section class="sec" id="ref-download"><h3 class="h-sec">10.1 · Download</h3>
+<dl class="deflist">
+<dt id="opt-i" data-kind="opzione" data-index="-i">-i FILE</dt>
+<dd>File with the links to download, one per line. Default: <code>links</code>. See <a href="#file-links">The links file</a>.</dd>
+<dt id="opt-a" data-kind="opzione" data-index="-a">-a FILE</dt>
+<dd>Accounts file, <code>dominio:utente:password</code> (domain:username:password). Default: <code>account</code>. See <a href="#file-account">The account file</a>.</dd>
+<dt id="opt-d" data-kind="opzione" data-index="-d">-d DIR</dt>
+<dd>Folder in which to save the files (created if it does not exist). Default: <code>downloads</code>.</dd>
+<dt id="opt-s" data-kind="opzione" data-index="-s">-s N</dt>
+<dd>Connections per file. Default: 1. See <a href="#connessioni">Connections per file</a>.</dd>
+<dt id="opt-j" data-kind="opzione" data-index="-j">-j N</dt>
+<dd>Files downloaded at once, and size of the batches of links. Default: 5. See <a href="#parallelo">How many files at once</a>.</dd>
+<dt id="opt-c" data-kind="opzione" data-index="-c">-c</dt>
+<dd>Resumes interrupted downloads from where they stopped. However, it also downloads files that are already complete again: see <a href="#ripresa">Interruptions and resuming</a>.</dd>
+<dt id="opt-rate" data-kind="opzione" data-index="--rate">--rate SIZE</dt>
+<dd>Overall bandwidth limit, for example <code>2M</code>. Default: <code>0</code>, no limit. See <a href="#banda">Limiting bandwidth</a>.</dd>
+<dt id="opt-timeout" data-kind="opzione" data-index="--timeout">--timeout SEC</dt>
+<dd>Maximum seconds to wait for the connection and for the server's first response during a download. Default: 60.</dd>
+<dt id="opt-retries" data-kind="opzione" data-index="--retries">--retries N</dt>
+<dd>New attempts for each download after the first one. Default: 5.</dd>
+<dt id="opt-retry-wait" data-kind="opzione" data-index="--retry-wait">--retry-wait SEC</dt>
+<dd>Seconds to wait between one attempt and the next. Default: 2.</dd>
+<dt id="opt-U" data-kind="opzione" data-index="-U">-U UA</dt>
+<dd>How hoster presents itself to the sites (the <i>User-Agent</i>), for sign-in and download. Default: that of Firefox 128 on Linux. Change it only if a site requires it.</dd>
+<dt id="opt-k" data-kind="opzione" data-index="-k;--insecure">-k, --insecure</dt>
+<dd>Skips the check of security certificates for all sites. Normally not needed: see <a href="#certificati">Security certificates</a>.</dd>
+</dl>
+</section>
+
+<section class="sec" id="ref-estrazione"><h3 class="h-sec">10.2 · Extraction</h3>
+<dl class="deflist">
+<dt id="opt-e" data-kind="opzione" data-index="-e;--extract">-e, --extract</dt>
+<dd>Once the downloads have finished, extracts the RAR and ZIP archives in the download folder.</dd>
+<dt id="opt-extract-only" data-kind="opzione" data-index="--extract-only">--extract-only DIR</dt>
+<dd>Only extracts the archives in DIR and exits, without downloading.</dd>
+<dt id="opt-p" data-kind="opzione" data-index="-p">-p PASS</dt>
+<dd>Archive password. See <a href="#password">Passwords</a>.</dd>
+<dt id="opt-pwfile" data-kind="opzione" data-index="--pwfile">--pwfile FILE</dt>
+<dd>File of passwords to try, one per line. Default: <code>passwords.txt</code> (ignored if it does not exist).</dd>
+<dt id="opt-cleanup" data-kind="opzione" data-index="--cleanup">--cleanup</dt>
+<dd>After a successful extraction, deletes all the parts of the archive.</dd>
+</dl>
+</section>
+
+<section class="sec" id="ref-diagnostica"><h3 class="h-sec">10.3 · Diagnostics</h3>
+<dl class="deflist">
+<dt id="opt-dry-run" data-kind="opzione" data-index="--dry-run">--dry-run</dt>
+<dd>Signs in and works out the direct links, printing them, without downloading. See <a href="#prova-senza-scaricare">Trying without downloading</a>.</dd>
+<dt id="opt-debug" data-kind="opzione" data-index="--debug">--debug DIR</dt>
+<dd>Saves in DIR the pages received at each step of sign-in and of the search for the direct link. See <a href="#sito-nuovo">Trying a new site</a>.</dd>
+<dt id="opt-v" data-kind="opzione" data-index="-v;--verbose">-v, --verbose</dt>
+<dd>Also shows the direct link found for each file (lines with <code>→</code>).</dd>
+<dt id="opt-qe" data-kind="opzione" data-index="-qe">-qe</dt>
+<dd>Reduced output: no bars or messages for individual files. What remains: errors that stop the program, the final count <span class="ui">scaricati/falliti</span> (downloaded/failed) and the extraction messages.</dd>
+<dt id="opt-qa" data-kind="opzione" data-index="-qa">-qa</dt>
+<dd>Like <code>-qe</code>, without even the final count. Errors that stop the program and the extraction messages appear anyway.</dd>
+<dt id="opt-h" data-kind="opzione" data-index="-h;--help">-h, --help</dt>
+<dd>Shows the <a href="#guida-integrata">built-in guide</a>.</dd>
+</dl>
+</section>
+
+<section class="sec" id="file-usati" data-index="file;.part;.part.hoster"><h3 class="h-sec">10.4 · Files used</h3>
+<figure class="tbl-wrap"><table class="tbl"><thead><tr><th>File</th><th>What</th></tr></thead><tbody>
+<tr><td><code>account</code></td><td>Credentials, one line per site. Personal: never share it.</td></tr>
+<tr><td><code>links</code></td><td>Links to download, one per line.</td></tr>
+<tr><td><code>passwords.txt</code></td><td>Passwords to try on the archives, one per line (optional).</td></tr>
+<tr><td><code>downloads/</code></td><td>The downloaded (and extracted) files.</td></tr>
+<tr><td><code>NOME.part</code></td><td>File being downloaded: it takes its final name when it is complete.</td></tr>
+<tr><td><code>NOME.part.hoster</code></td><td>Resume notes for downloads with several connections (<code>-s</code>); they disappear once the download has finished.</td></tr>
+</tbody></table><figcaption class="cap">Table 10.1 — The files hoster reads and writes</figcaption></figure>
+</section>
+
+<section class="sec" id="stati-uscita" data-index="exit status;exit code"><h3 class="h-sec">10.5 · Exit statuses</h3>
+<p>The number hoster returns when it ends, useful if you run it from a script:</p>
+<figure class="tbl-wrap"><table class="tbl"><thead><tr><th>Status</th><th>When</th></tr></thead><tbody>
+<tr><td><code>0</code></td><td>The program has completed its run. <b>Even if some files failed</b>: the number is in the final line. This also applies to <code>--dry-run</code> and <code>--extract-only</code>.</td></tr>
+<tr><td><code>1</code></td><td>Error that stopped the program (missing file, badly written account…).</td></tr>
+<tr><td><code>2</code></td><td>Unknown or misspelled option.</td></tr>
+</tbody></table><figcaption class="cap">Table 10.2 — The exit statuses</figcaption></figure>
+</section>
+
+<section class="sec" id="esempi" data-index="examples"><h3 class="h-sec">10.6 · Ready-made examples</h3>
+<pre class="code"><code><span class="cm"># download the links in 'links' into ./downloads with the accounts in 'account'</span>
+<span class="p">$</span> ./hoster
+
+<span class="cm"># use a different list and destination folder</span>
+<span class="p">$</span> ./hoster -i kali.txt -d /media/iso
+
+<span class="cm"># work out the direct links without downloading (check)</span>
+<span class="p">$</span> ./hoster --dry-run
+
+<span class="cm"># download and then extract the archives with the given password</span>
+<span class="p">$</span> ./hoster -e -p LAPASSWORD
+
+<span class="cm"># extract an already downloaded folder</span>
+<span class="p">$</span> ./hoster --extract-only downloads -p PW
+
+<span class="cm"># resume after an interruption, with fewer files at once and limited bandwidth</span>
+<span class="p">$</span> ./hoster -c -j 2 --rate 3M</code></pre>
+</section>
+</section>
+
+<section class="chapter" id="problemi"><div class="ch-head"><span class="ch-kick">Chapter 11</span><h2 class="h-ch">Troubleshooting</h2></div>
+
+<section class="sec" id="errori-avvio" data-index="errors"><h3 class="h-sec">11.1 · The program stops immediately</h3>
+<p>These messages start with <code>hoster:</code> and stop the program before it begins.</p>
+<figure class="tbl-wrap"><table class="tbl"><thead><tr><th>Message</th><th>What it means and what to do</th></tr></thead><tbody>
+<tr><td><code>hoster: account: open account: no such file or directory</code></td><td>There is no <code>account</code> file in the folder you ran the program from. Create it (from the <code>account.example</code> template) or specify it with <code>-a</code>.</td></tr>
+<tr><td><code>hoster: link: open links: no such file or directory</code></td><td>The links file is missing. Create it or specify it with <code>-i</code>.</td></tr>
+<tr><td><code>hoster: nessun link in links</code></td><td>&laquo;No links in links&raquo;: the file exists but contains only blank lines or comments.</td></tr>
+<tr><td><code>hoster: account: riga 3 non valida (manca ':' o ';'): "…"</code></td><td>&laquo;Line 3 invalid (missing ':' or ';')&raquo;: the indicated line of the <code>account</code> file has no separators. Correct format: <code>dominio:utente:password</code> (domain:username:password).</td></tr>
+<tr><td><code>hoster: account: riga 3: manca il separatore tra utente e password: "…"</code></td><td>&laquo;Line 3: separator between username and password missing&raquo;: there is only one separator, so the username or the password is missing.</td></tr>
+<tr><td><code>hoster: account: riga 3: dominio o utente vuoto: "…"</code></td><td>&laquo;Line 3: empty domain or username&raquo;: the line starts with a separator, or the username is empty (for example <code>sito.org::password</code>).</td></tr>
+<tr><td><code>hoster: dimensione non valida: "2X"</code></td><td>&laquo;Invalid size&raquo;: the value of <code>--rate</code> is not a number with a valid unit (<code>k</code>, <code>M</code>, <code>G</code>, <code>T</code>).</td></tr>
+<tr><td><code>hoster: cartella di destinazione: … permission denied</code></td><td>&laquo;Destination folder&raquo;: the folder given with <code>-d</code> cannot be created or written to: choose one of your own, or check the permissions.</td></tr>
+<tr><td><code>flag provided but not defined: -zz</code></td><td>Unknown option (this message is in English, unlike hoster's other messages, because it comes from the program's underlying system). The guide with the correct options appears immediately afterwards.</td></tr>
+</tbody></table><figcaption class="cap">Table 11.1 — Errors at startup</figcaption></figure>
+<div class="callout c-info"><div class="callout-i">i</div><div><b>Note.</b> In the messages about accounts the faulty line appears in quotation marks, password included: be careful if you copy the message to ask for help.</div></div>
+</section>
+
+<section class="sec" id="errori-link" data-index="login;countdown"><h3 class="h-sec">11.2 · A link does not resolve</h3>
+<p>These messages appear next to <code>✗</code> for a single link; the other links carry on.</p>
+<figure class="tbl-wrap"><table class="tbl"><thead><tr><th>Message</th><th>What it means and what to do</th></tr></thead><tbody>
+<tr><td><code>nessun account nel file 'account' per sito.com</code></td><td>&laquo;No account in the 'account' file for sito.com&raquo;: the line for that site is missing from <code>account</code>, or its name is written differently.</td></tr>
+<tr><td><code>login non riuscito su sito.com (credenziali errate, captcha o pagina diversa: usa -debug)</code></td><td>&laquo;Login failed on sito.com (wrong credentials, captcha or different page: use -debug)&raquo;. Check username and password by signing in to the site with the browser. If they work there, the site may be asking for a captcha at sign-in or have a page that differs from the usual one: try with <code>--debug</code> (see <a href="#sito-nuovo">Trying a new site</a>).</td></tr>
+<tr><td><code>apertura login: … no such host</code>, <code>… connection refused</code>, <code>… timeout</code> (and similar ones starting with <code>invio login</code>, <code>apertura pagina file</code>, <code>invio form download</code>)</td><td>The site cannot be reached (the messages mean opening the sign-in page, sending the sign-in, opening the file page, sending the download form): no connection, wrong site name, or site out of service.</td></tr>
+<tr><td><code>countdown rilevato: l'account non risulta premium su sito.com</code></td><td>&laquo;Countdown detected: the account does not appear to be premium on sito.com&raquo;: the site shows the wait reserved for free users; the account is not premium, or the premium has expired. hoster does not bypass waiting times.</td></tr>
+<tr><td><code>link diretto non trovato (forse file solo-premium, o resolver da rifinire: usa -debug)</code></td><td>&laquo;Direct link not found (perhaps a premium-only file, or the resolver needs refining: use -debug)&raquo;: the page talks about premium but the link is not there; often an account without an active premium. Otherwise the site must be adapted with <code>--debug</code>.</td></tr>
+<tr><td><code>link diretto non trovato (rifinisci il resolver con -debug)</code></td><td>&laquo;Direct link not found (refine the resolver with -debug)&raquo;: the file may have been removed (check the link in the browser), or the site has a page that hoster does not know yet.</td></tr>
+<tr><td><code>URL non valido</code></td><td>&laquo;Invalid URL&raquo;: the line in <code>links</code> is not a web address.</td></tr>
+</tbody></table><figcaption class="cap">Table 11.2 — Errors on a single link</figcaption></figure>
+</section>
+
+<section class="sec" id="errori-download" data-index="HTTP 403;HTTP 429;disk full"><h3 class="h-sec">11.3 · A download fails</h3>
+<figure class="tbl-wrap"><table class="tbl"><thead><tr><th>Message</th><th>What it means and what to do</th></tr></thead><tbody>
+<tr><td><code>HTTP 403</code>, <code>HTTP 404</code>, <code>HTTP 410</code></td><td>The server refuses the file even after regenerating the link 2 times. Try again later with <code>-c</code>; if it persists, open the link in the browser.</td></tr>
+<tr><td><code>HTTP 429</code>, <code>HTTP 503</code></td><td>The site is overloaded or limits simultaneous downloads: try again with fewer files at once, for example <code>-j 2</code>.</td></tr>
+<tr><td><code>download incompleto: 734003200/1288490188 byte</code></td><td>&laquo;Incomplete download&raquo;: the server closed the connection before the end on every attempt. Run again with <code>-c</code> to resume.</td></tr>
+<tr><td><code>connection reset</code>, <code>unexpected EOF</code>, <code>timeout</code></td><td>Unstable network. Run again with <code>-c</code>; on very unstable networks increase <code>--retries</code> and <code>--timeout</code>.</td></tr>
+<tr><td><code>no space left on device</code></td><td>The disk is full. Free up space and run again with <code>-c</code>.</td></tr>
+</tbody></table><figcaption class="cap">Table 11.3 — Errors during the download</figcaption></figure>
+</section>
+
+<section class="sec" id="errori-estrazione"><h3 class="h-sec">11.4 · Extraction fails</h3>
+<figure class="tbl-wrap"><table class="tbl"><thead><tr><th>Message</th><th>What it means and what to do</th></tr></thead><tbody>
+<tr><td><code>estrazione fallita (password errata, parti mancanti o formato non supportato)</code></td><td>&laquo;Extraction failed (wrong password, missing parts or unsupported format)&raquo;: no password worked, or a part is missing, or the archive is damaged. Check that all the parts are there; try the password with <code>-p</code>; install <code>7zip</code> or <code>unrar</code> for unusual formats.</td></tr>
+<tr><td><code>estrazione: nessun archivio in downloads</code></td><td>&laquo;Extraction: no archives in downloads&raquo;: there are no <code>.rar</code> or <code>.zip</code> files in the folder.</td></tr>
+<tr><td><code>estrazione: lettura cartella: … no such file or directory</code></td><td>&laquo;Extraction: reading folder&raquo;: the folder given to <code>--extract-only</code> does not exist: check its name.</td></tr>
+<tr><td><code>percorso non sicuro nell'archivio</code></td><td>&laquo;Unsafe path in the archive&raquo;: the archive tries to write outside the destination folder, so hoster refuses to extract it. Do not trust its contents.</td></tr>
+</tbody></table><figcaption class="cap">Table 11.4 — Extraction errors</figcaption></figure>
+</section>
+
+<section class="sec" id="altri-problemi"><h3 class="h-sec">11.5 · Other situations</h3>
+<dl class="deflist">
+<dt id="p-lento" data-kind="voce" data-index="slow download"><span class="dt-t">Downloads are slow</span></dt>
+<dd>Check that you have not given <code>--rate</code>. Some sites limit the speed per file: more files at once (<code>-j</code>) help; if the site allows it, so does <code>-s</code>.</dd>
+<dt id="p-barre" data-kind="voce" data-index="bars not visible"><span class="dt-t">I don't see the bars, only lines of text</span></dt>
+<dd>This happens when the output does not go to a terminal (for example if you send it to a file): it is intentional, and lines of text are better suited to a log file. Also check that you have not given <code>-qe</code> or <code>-qa</code>.</dd>
+<dt id="p-colori" data-kind="voce" data-index="output without colors"><span class="dt-t">I want output without colors</span></dt>
+<dd>Set the <code>NO_COLOR</code> variable: <code>NO_COLOR=1 ./hoster</code>.</dd>
+<dt id="p-riscarica" data-kind="voce" data-index="files downloaded again"><span class="dt-t">A file already downloaded is downloaded again</span></dt>
+<dd>This happens with <code>-c</code> (chapter 5.3), or for links with a code instead of the name (chapter 11.6). Remove the files that are already complete from the list.</dd>
+<dt id="p-script" data-kind="voce" data-index="script"><span class="dt-t">I use it in a script</span></dt>
+<dd>Careful: if some downloads fail, hoster still ends with status 0 (&laquo;success&raquo;). To notice, you have to read the final line <span class="ui">scaricati: N  falliti: M</span> (downloaded: N, failed: M). See <a href="#stati-uscita">Exit statuses</a>.</dd>
+</dl>
+</section>
+
+<section class="sec" id="limiti-noti" data-index="known limitations"><h3 class="h-sec">11.6 · Known limitations</h3>
+<p>Known behaviors of version 1.0, to bear in mind:</p>
+<ul class="ul">
+<li><b>With <code>-c</code> files that are already complete are downloaded again too.</b> Before running again, remove the finished files from the list.</li>
+<li><b>Files with a code instead of the name</b> (such as <code>https://filestore.me/nhail4vmw015</code>) are not recognized as already downloaded: they are downloaded again at every run.</li>
+<li><b>The exit status is 0 even if some downloads fail</b>: the number of failures is only in the final line.</li>
+<li>Rarely, if two direct links expire at the same moment, hoster signs in to the site twice. This has no consequences for the downloads.</li>
+</ul>
+</section>
+</section>
+
+<section class="chapter" id="glossario"><div class="ch-head"><span class="ch-kick">Chapter 12</span><h2 class="h-ch">Glossary</h2></div>
+<section class="sec" id="termini"><h3 class="h-sec">12.1 · Terms</h3>
+<dl class="deflist">
+<dt id="g-archivio-parti" data-kind="termine" data-index="parts (archive)"><span class="dt-t">Multi-part archive</span></dt><dd>An archive split into several files (<code>part01</code>, <code>part02</code>…) to be extracted together. See Ch. 6.</dd>
+<dt id="g-cert" data-kind="termine" data-index="certificate"><span class="dt-t">Certificate</span></dt><dd>The digital document with which an <code>https</code> site proves its identity. See Ch. 7.</dd>
+<dt id="g-dryrun" data-kind="termine" data-index="dry run"><span class="dt-t">Dry run (trial)</span></dt><dd>A trial run: sign-in and search for the direct links, without downloading. See Ch. 4.</dd>
+<dt id="g-rev" data-kind="termine" data-index=".rev"><span class="dt-t">.rev file</span></dt><dd>Recovery file of a RAR archive: these files make it possible to rebuild a damaged or missing part.</dd>
+<dt id="g-filehosting" data-kind="termine" data-index="file hosting"><span class="dt-t">File hosting</span></dt><dd>A site where files are uploaded so that others can download them, with one link for each file.</dd>
+<dt id="g-gruppo" data-kind="termine" data-index="batch of links"><span class="dt-t">Batch</span></dt><dd>The links that hoster processes together: as many as specified with <code>-j</code> (normally 5). See Ch. 5.</dd>
+<dt id="g-linkdiretto" data-kind="termine" data-index="direct link"><span class="dt-t">Direct link</span></dt><dd>The address the file actually comes from, different from the file's page. It does not last long.</dd>
+<dt id="g-premium" data-kind="termine" data-index="premium"><span class="dt-t">Premium</span></dt><dd>Paid account: downloads without waiting times or captchas, often at full speed.</dd>
+<dt id="g-release" data-kind="termine" data-index="release"><span class="dt-t">Release</span></dt><dd>A published version of the program, with the ready-made file to download.</dd>
+<dt id="g-repository" data-kind="termine" data-index="repository"><span class="dt-t">Repository</span></dt><dd>The public collection on GitHub with the program, the code, the manuals and their history. It is copied with <code>git clone</code>.</dd>
+<dt id="g-ua" data-kind="termine" data-index="User-Agent"><span class="dt-t">User-Agent</span></dt><dd>The way a program presents itself to sites; hoster presents itself as Firefox. See <code>-U</code>.</dd>
+<dt id="g-xfs" data-kind="termine" data-index="XFileSharing"><span class="dt-t">XFileSharing</span></dt><dd>The program used by many file hosting sites: that is why they behave in almost the same way.</dd>
+</dl>
+</section>
+</section>
+
+<section class="chapter" id="index"><div class="ch-head"><span class="ch-kick">Chapter 13</span><h2 class="h-ch">Index</h2></div>
+<p class="lead">Options, files and topics of the manual, in alphabetical order. Options are sorted without their dashes: <code>--rate</code> is under R.</p>
+<div id="index-list" class="idx"><noscript><div class="callout c-info"><div class="callout-i">i</div><div><b>Note.</b> The index is built by the browser and requires JavaScript. Without it, use the chapter contents and the <a href="#riferimento">option reference</a>.</div></div></noscript></div>
+</section>
+</main>
+  </div>
+  <footer class="doc-foot">hoster · User Manual v1.0 · September 2026</footer>
+</div>
+<script>
+/* Ricerca nella barra laterale e indice analitico. Senza dipendenze; senza
+   JavaScript il manuale resta completo (la casella di ricerca resta nascosta). */
+(function () {
+  "use strict";
+  var main = document.querySelector(".main");
+  if (!main) return;
+
+  // Minuscole e senza accenti, carattere per carattere: la lunghezza resta
+  // uguale, così le posizioni trovate valgono anche sul testo originale.
+  function fold(s) {
+    var o = "";
+    for (var i = 0; i < s.length; i++) {
+      var c = s.charAt(i);
+      var f = c.normalize ? c.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase() : c.toLowerCase();
+      o += f.length === 1 ? f : c;
+    }
+    return o;
+  }
+  function esc(s) {
+    return s.replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+  function secTitle(sec) {
+    var h = sec && sec.querySelector("h3.h-sec, h2.h-ch");
+    return h ? h.textContent.replace(/\s+/g, " ").trim() : "";
+  }
+  function splitTitle(t) { // "5.3 · Interruzioni e ripresa" -> ["5.3", "Interruzioni e ripresa"]
+    var m = /^([\d.]+) · (.*)$/.exec(t);
+    return m ? [m[1], m[2]] : ["", t];
+  }
+
+  /* ---------------- indice analitico ---------------- */
+  var list = document.getElementById("index-list");
+  if (list) {
+    var terms = {};
+    var els = main.querySelectorAll("[data-index]");
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i];
+      var target = el.id ? el : el.closest("[id]");
+      if (!target || target.id === "index") continue;
+      var sec = el.closest(".sec") || el.closest(".chapter");
+      var label = splitTitle(secTitle(sec));
+      var names = el.getAttribute("data-index").split(";");
+      for (var j = 0; j < names.length; j++) {
+        var name = names[j].trim();
+        if (!name) continue;
+        var key = fold(name);
+        var t = terms[key] || (terms[key] = { name: name, refs: [], seen: {} });
+        if (t.seen[target.id]) continue;
+        t.seen[target.id] = true;
+        t.refs.push({ id: target.id, n: label[0], title: label[1] });
+      }
+    }
+    var sortKey = function (k) { return k.replace(/^[-.]+/, ""); };
+    var keys = Object.keys(terms).sort(function (a, b) {
+      return sortKey(a).localeCompare(sortKey(b), "en") || a.localeCompare(b, "en");
+    });
+    var groups = [], cur = null;
+    keys.forEach(function (k) {
+      var ch = sortKey(k).charAt(0).toUpperCase();
+      if (!/[A-Z]/.test(ch)) ch = "#";
+      if (!cur || cur.ch !== ch) { cur = { ch: ch, items: [] }; groups.push(cur); }
+      cur.items.push(terms[k]);
+    });
+    var out = "";
+    groups.forEach(function (g) {
+      out += '<div class="idx-g"><h3 class="idx-l">' + g.ch + '</h3><ul class="idx-ul">';
+      g.items.forEach(function (t) {
+        var isCode = /^[-.]|_|\.(txt|sh|example|hoster)$/.test(t.name) ||
+          /^(PAGER|less|rar|unrar|7z|make|uname|git clone|git pull|downloads)$/.test(t.name);
+        var nm = isCode ? "<code>" + esc(t.name) + "</code>" : esc(t.name);
+        out += '<li><span class="idx-t">' + nm + "</span> — " + t.refs.map(function (r) {
+          return '<a href="' + '#' + r.id + '" title="' + esc(r.title) + '">' + (r.n ? r.n + " " : "") + esc(r.title) + "</a>";
+        }).join(", ") + "</li>";
+      });
+      out += "</ul></div>";
+    });
+    list.innerHTML = out;
+  }
+
+  /* ---------------- ricerca ---------------- */
+  var box = document.getElementById("srch");
+  var q = document.getElementById("srch-q");
+  var info = document.getElementById("srch-info");
+  var res = document.getElementById("srch-res");
+  var toc = document.getElementById("toc");
+  if (!box || !q) return;
+  box.hidden = false;
+
+  var secs = [];
+  var nodes = main.querySelectorAll(".sec");
+  for (var k = 0; k < nodes.length; k++) {
+    var s = nodes[k];
+    if (s.closest("#index")) continue;
+    var parts = [], w = document.createTreeWalker(s, NodeFilter.SHOW_TEXT, null), tn;
+    while ((tn = w.nextNode())) if (!tn.parentNode.closest("h3.h-sec")) parts.push(tn.data);
+    var txt = parts.join(" ").replace(/\s+/g, " ").replace(/ ([,.;:)!?»])/g, "$1").replace(/([(«]) /g, "$1").trim();
+    var tt = secTitle(s);
+    secs.push({ el: s, id: s.id, title: tt, ftitle: fold(tt), text: txt, ftext: fold(txt) });
+  }
+  var tocLinks = {};
+  if (toc) {
+    var as = toc.querySelectorAll("a");
+    for (var a = 0; a < as.length; a++) tocLinks[as[a].getAttribute("href").slice(1)] = as[a].parentNode;
+  }
+
+  function count(hay, w) {
+    var n = 0, p = hay.indexOf(w);
+    while (p >= 0) { n++; p = hay.indexOf(w, p + w.length); }
+    return n;
+  }
+  function markWords(s, fs, words) { // testo -> HTML con <mark> sulle parole cercate
+    var ranges = [];
+    words.forEach(function (w) {
+      var p = fs.indexOf(w);
+      while (p >= 0) { ranges.push([p, p + w.length]); p = fs.indexOf(w, p + w.length); }
+    });
+    ranges.sort(function (x, y) { return x[0] - y[0]; });
+    var o = "", last = 0;
+    ranges.forEach(function (r) {
+      if (r[0] < last) return;
+      o += esc(s.slice(last, r[0])) + "<mark>" + esc(s.slice(r[0], r[1])) + "</mark>";
+      last = r[1];
+    });
+    return o + esc(s.slice(last));
+  }
+
+  function clearMarks() {
+    var ms = main.querySelectorAll("mark.hit");
+    for (var i = 0; i < ms.length; i++) {
+      var m = ms[i], p = m.parentNode;
+      p.replaceChild(document.createTextNode(m.textContent), m);
+      p.normalize();
+    }
+  }
+  function highlight(root, words) {
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (n) {
+        return n.parentNode.closest("svg, script, style, mark") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var list = [], n;
+    while ((n = walker.nextNode())) list.push(n);
+    var first = null;
+    list.forEach(function (node) {
+      var s = node.data, fs = fold(s), ranges = [];
+      words.forEach(function (w) {
+        var p = fs.indexOf(w);
+        while (p >= 0) { ranges.push([p, p + w.length]); p = fs.indexOf(w, p + w.length); }
+      });
+      if (!ranges.length) return;
+      ranges.sort(function (x, y) { return x[0] - y[0]; });
+      var frag = document.createDocumentFragment(), last = 0;
+      ranges.forEach(function (r) {
+        if (r[0] < last) return;
+        if (r[0] > last) frag.appendChild(document.createTextNode(s.slice(last, r[0])));
+        var m = document.createElement("mark");
+        m.className = "hit";
+        m.textContent = s.slice(r[0], r[1]);
+        frag.appendChild(m);
+        if (!first) first = m;
+        last = r[1];
+      });
+      if (last < s.length) frag.appendChild(document.createTextNode(s.slice(last)));
+      node.parentNode.replaceChild(frag, node);
+    });
+    return first;
+  }
+
+  var found = [], sel = -1, words = [];
+  function search() {
+    var v = fold(q.value.trim());
+    words = v.split(/\s+/).filter(function (w) { return w.length > 0; });
+    found = [];
+    sel = -1;
+    Object.keys(tocLinks).forEach(function (id) { tocLinks[id].classList.remove("toc-hit"); });
+    if (v.length < 2) {
+      res.innerHTML = "";
+      info.textContent = v.length ? "Type at least two letters." : "";
+      if (toc) toc.classList.remove("filtering");
+      clearMarks();
+      return;
+    }
+    secs.forEach(function (s) {
+      var score = 0;
+      for (var i = 0; i < words.length; i++) {
+        var c = count(s.ftext, words[i]);
+        var inTitle = s.ftitle.indexOf(words[i]) >= 0;
+        if (!c && !inTitle) return;
+        score += c + (inTitle ? 20 : 0);
+      }
+      found.push({ s: s, score: score });
+    });
+    found.sort(function (x, y) { return y.score - x.score; });
+    info.textContent = found.length
+      ? (found.length === 1 ? "1 section found" : found.length + " sections found") + " · Enter to open the first"
+      : "No results.";
+    var html = "";
+    found.slice(0, 15).forEach(function (f, i) {
+      var s = f.s, p = Math.max(0, s.ftext.indexOf(words[0]));
+      var a = Math.max(0, p - 50), b = Math.min(s.text.length, p + words[0].length + 70);
+      var snip = (a > 0 ? "…" : "") + markWords(s.text.slice(a, b), s.ftext.slice(a, b), words) + (b < s.text.length ? "…" : "");
+      var t = splitTitle(s.title);
+      html += '<li><a href="' + '#' + s.id + '" data-i="' + i + '"><span class="r-t"><span class="toc-n">' + t[0] +
+        "</span><span>" + esc(t[1]) + '</span></span><span class="r-s">' + snip + "</span></a></li>";
+    });
+    res.innerHTML = html;
+    if (toc) {
+      toc.classList.add("filtering");
+      found.forEach(function (f) {
+        var li = tocLinks[f.s.id];
+        if (li) li.classList.add("toc-hit");
+        var ch = f.s.el.closest(".chapter");
+        if (ch && tocLinks[ch.id]) tocLinks[ch.id].classList.add("toc-hit");
+      });
+    }
+  }
+  function go(i) {
+    var f = found[i];
+    if (!f) return;
+    clearMarks();
+    var first = highlight(f.s.el, words);
+    if (history.replaceState) history.replaceState(null, "", "#" + f.s.id);
+    (first || f.s.el).scrollIntoView({ block: first ? "center" : "start" });
+    f.s.el.classList.remove("flash");
+    void f.s.el.offsetWidth;
+    f.s.el.classList.add("flash");
+  }
+  function setSel(i) {
+    var links = res.querySelectorAll("a");
+    if (!links.length) return;
+    sel = (i + links.length) % links.length;
+    for (var k = 0; k < links.length; k++) links[k].classList.toggle("on", k === sel);
+    links[sel].scrollIntoView({ block: "nearest" });
+  }
+
+  var timer = null;
+  q.addEventListener("input", function () {
+    clearTimeout(timer);
+    timer = setTimeout(search, 120);
+  });
+  q.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") { e.preventDefault(); clearTimeout(timer); search(); go(sel >= 0 ? sel : 0); }
+    else if (e.key === "ArrowDown") { e.preventDefault(); setSel(sel + 1); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); setSel(sel - 1); }
+    else if (e.key === "Escape") { q.value = ""; search(); q.blur(); }
+  });
+  res.addEventListener("click", function (e) {
+    var a = e.target.closest("a[data-i]");
+    if (!a) return;
+    e.preventDefault();
+    go(+a.getAttribute("data-i"));
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "/" || e.ctrlKey || e.metaKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
+    e.preventDefault();
+    q.focus();
+    q.select();
+  });
+})();
+</script>
+</body></html>

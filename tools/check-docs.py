@@ -10,17 +10,23 @@ Fallisce se:
   - l'eseguibile ./hoster (registrato nel repository) manca, non è un ELF
     x86-64 o non contiene la versione di help.go;
   - la versione di help.go non coincide con quella di README.md,
-    docs/index.html e dei due manuali;
-  - un link interno #ancora dei manuali punta a un id inesistente.
+    docs/index.html e dei due manuali (i manuali sono in inglese: nella
+    copertina c'è <span>Version</span>, in docs/index.html <span>Versione</span>);
+  - un manuale non dichiara lang="en";
+  - un link interno #ancora dei manuali punta a un id inesistente;
+  - un link relativo di docs/index.html o dei manuali punta a un file che non
+    esiste in docs/ (i nomi dei manuali contengono uno spazio: negli href va
+    scritto %20).
 """
 import pathlib
 import re
 import sys
+import urllib.parse
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DOCS = ROOT / "docs"
-USER = DOCS / "HOSTER_Manuale_Utente.html"
-TECH = DOCS / "HOSTER_Manuale_Tecnico.html"
+USER = DOCS / "User Manual.html"
+TECH = DOCS / "Technical Manual.html"
 
 errors = []
 
@@ -74,8 +80,8 @@ else:
     checks = {
         "README.md": rf"Versione {re.escape(version)}\b",
         "docs/index.html": rf"<span>Versione</span><b>{re.escape(version)}</b>",
-        "docs/HOSTER_Manuale_Utente.html": rf"<span>Versione</span><b>{re.escape(version)}</b>",
-        "docs/HOSTER_Manuale_Tecnico.html": rf"<span>Versione</span><b>{re.escape(version)}</b>",
+        "docs/User Manual.html": rf"<span>Version</span><b>{re.escape(version)}</b>",
+        "docs/Technical Manual.html": rf"<span>Version</span><b>{re.escape(version)}</b>",
     }
     for rel, pat in checks.items():
         if not re.search(pat, (ROOT / rel).read_text()):
@@ -93,6 +99,24 @@ else:
     elif version and ("hoster " + version).encode() not in data:
         err(f"./hoster non contiene la versione {version}: rigeneralo con 'make'")
 
+# ---- lingua dei manuali ----
+for path, text in ((USER, user), (TECH, tech)):
+    if not re.search(r'<html lang="en"[ >]', text):
+        err(f'{path.name}: manca <html lang="en"> (i manuali sono in inglese)')
+
+# ---- link relativi verso altri file di docs/ ----
+index = DOCS / "index.html"
+for path, text in ((index, index.read_text()), (USER, user), (TECH, tech)):
+    html = re.sub(r"<script\b.*?</script>", "", text, flags=re.S)  # solo l'HTML
+    for href in sorted(set(re.findall(r'href="([^"#]+)(?:#[^"]*)?"', html))):
+        if re.match(r"[a-z]+:", href):
+            continue
+        if " " in href:
+            err(f"{path.name}: href con uno spazio ({href}): va scritto %20")
+            continue
+        if not (DOCS / urllib.parse.unquote(href)).is_file():
+            err(f"{path.name}: link a {href}, che non esiste in docs/")
+
 # ---- ancore interne ----
 for path, text in ((USER, user), (TECH, tech)):
     ids = set(re.findall(r'\bid="([^"]+)"', text))
@@ -101,7 +125,8 @@ for path, text in ((USER, user), (TECH, tech)):
             err(f"{path.name}: link a #{anchor}, che non esiste")
     other = TECH if path == USER else USER
     other_ids = set(re.findall(r'\bid="([^"]+)"', other.read_text()))
-    for anchor in sorted(set(re.findall(r'href="' + other.name + r'#([^"]+)"', text))):
+    other_href = re.escape(urllib.parse.quote(other.name))
+    for anchor in sorted(set(re.findall(r'href="' + other_href + r'#([^"]+)"', text))):
         if anchor not in other_ids:
             err(f"{path.name}: link a {other.name}#{anchor}, che non esiste")
 

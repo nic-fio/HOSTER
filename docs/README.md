@@ -7,11 +7,11 @@ salvate in un repository. I manuali si leggono in uno di questi due modi.
 
 | Documento | Link |
 |---|---|
-| Manuale utente | https://nic-fio.github.io/HOSTER/HOSTER_Manuale_Utente.html |
-| Manuale tecnico | https://nic-fio.github.io/HOSTER/HOSTER_Manuale_Tecnico.html |
+| Manuale utente (in inglese) | https://nic-fio.github.io/HOSTER/User%20Manual.html |
+| Manuale tecnico (in inglese) | https://nic-fio.github.io/HOSTER/Technical%20Manual.html |
 | Pagina iniziale | https://nic-fio.github.io/HOSTER/ |
 
-**Senza rete**: clona il repository e apri `docs/HOSTER_Manuale_Utente.html` nel
+**Senza rete**: clona il repository e apri `docs/User Manual.html` nel
 browser. Ogni manuale è un file unico che contiene stile, script (ricerca e
 indice analitico) e diagrammi, quindi funziona anche offline.
 
@@ -25,8 +25,8 @@ Dentro il programma, `hoster --help` mostra la guida integrata a schede.
 | File | Cosa |
 |---|---|
 | `index.html` | Pagina iniziale del sito della documentazione. |
-| `HOSTER_Manuale_Utente.html` | Installare e usare hoster; riferimento di tutte le opzioni. |
-| `HOSTER_Manuale_Tecnico.html` | Architettura, funzionamento interno, test, convenzioni, limiti noti. |
+| `User Manual.html` | Manuale utente, in inglese: installare e usare hoster; riferimento di tutte le opzioni. |
+| `Technical Manual.html` | Manuale tecnico, in inglese: architettura, funzionamento interno, test, convenzioni, limiti noti. |
 | `decisioni-e-storia.md` | Perché hoster è fatto così. |
 
 `tools/check-docs.py` (eseguito da `make test`) verifica che i manuali siano

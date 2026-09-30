@@ -40,13 +40,13 @@ $ ./hoster -e -p LAPASSWORD
 
 | Documento | Per |
 |---|---|
-| [Manuale utente](https://nic-fio.github.io/HOSTER/manuale-utente.html) | Installare e usare hoster: account, link, download, estrazione, problemi e soluzioni, tutte le opzioni. |
-| [Manuale tecnico](https://nic-fio.github.io/HOSTER/manuale-tecnico.html) | Come è fatto dentro: architettura, resolver, motore di download, estrazione, test, come aggiungere un sito. |
+| [Manuale utente](https://nic-fio.github.io/HOSTER/HOSTER_Manuale_Utente.html) | Installare e usare hoster: account, link, download, estrazione, problemi e soluzioni, tutte le opzioni. |
+| [Manuale tecnico](https://nic-fio.github.io/HOSTER/HOSTER_Manuale_Tecnico.html) | Come è fatto dentro: architettura, resolver, motore di download, estrazione, test, come aggiungere un sito. |
 | [Decisioni e storia](docs/decisioni-e-storia.md) | Perché hoster è fatto così. |
 
 I manuali sono pagine HTML, che GitHub mostra come codice sorgente: leggili
 online su **https://nic-fio.github.io/HOSTER/**, oppure apri
-`docs/manuale-utente.html` nel browser da un clone (funzionano anche senza rete).
+`docs/HOSTER_Manuale_Utente.html` nel browser da un clone (funzionano anche senza rete).
 
 ## Installazione
 

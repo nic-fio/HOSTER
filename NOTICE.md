@@ -16,7 +16,6 @@ hoster, non per loro.
 | Componente | Dove | Licenza |
 |---|---|---|
 | `github.com/nwaples/rardecode/v2` v2.2.5 (decoder RAR) | compilato dentro il programma | BSD 2-Clause, testo qui sotto |
-| Mermaid (diagrammi dei manuali) | `docs/assets/vendor/mermaid.min.js` | MIT, vedi `docs/assets/vendor/mermaid.LICENSE` |
 
 ### Licenza di rardecode
 

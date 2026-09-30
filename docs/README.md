@@ -7,13 +7,13 @@ salvate in un repository. I manuali si leggono in uno di questi due modi.
 
 | Documento | Link |
 |---|---|
-| Manuale utente | https://nic-fio.github.io/HOSTER/manuale-utente.html |
-| Manuale tecnico | https://nic-fio.github.io/HOSTER/manuale-tecnico.html |
+| Manuale utente | https://nic-fio.github.io/HOSTER/HOSTER_Manuale_Utente.html |
+| Manuale tecnico | https://nic-fio.github.io/HOSTER/HOSTER_Manuale_Tecnico.html |
 | Pagina iniziale | https://nic-fio.github.io/HOSTER/ |
 
-**Senza rete**: clona il repository e apri `docs/manuale-utente.html` nel
-browser. Tutto quello che serve alle pagine (stile, script, diagrammi) è in
-`docs/assets`, quindi funzionano anche offline.
+**Senza rete**: clona il repository e apri `docs/HOSTER_Manuale_Utente.html` nel
+browser. Ogni manuale è un file unico che contiene stile, script (ricerca e
+indice analitico) e diagrammi, quindi funziona anche offline.
 
 [Decisioni e storia](decisioni-e-storia.md) è in Markdown, quindi GitHub lo
 mostra già formattato.
@@ -25,10 +25,9 @@ Dentro il programma, `hoster --help` mostra la guida integrata a schede.
 | File | Cosa |
 |---|---|
 | `index.html` | Pagina iniziale del sito della documentazione. |
-| `manuale-utente.html` | Installare e usare hoster; riferimento di tutte le opzioni. |
-| `manuale-tecnico.html` | Architettura, funzionamento interno, test, convenzioni, limiti noti. |
+| `HOSTER_Manuale_Utente.html` | Installare e usare hoster; riferimento di tutte le opzioni. |
+| `HOSTER_Manuale_Tecnico.html` | Architettura, funzionamento interno, test, convenzioni, limiti noti. |
 | `decisioni-e-storia.md` | Perché hoster è fatto così. |
-| `assets/` | Foglio di stile, script e una copia locale di Mermaid (MIT). |
 
 `tools/check-docs.py` (eseguito da `make test`) verifica che i manuali siano
 allineati al codice.

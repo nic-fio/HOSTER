@@ -1,7 +1,7 @@
 # hoster — decisioni e storia
 
 > Perché hoster è fatto così: il contesto, le decisioni e la storia del progetto.
-> Il funzionamento in dettaglio è nel [manuale tecnico](https://nic-fio.github.io/HOSTER/manuale-tecnico.html).
+> Il funzionamento in dettaglio è nel [manuale tecnico](https://nic-fio.github.io/HOSTER/HOSTER_Manuale_Tecnico.html).
 > Stato: **completo e collaudato** (giugno 2026). Uso strettamente **personale**:
 > non viene distribuito, serve a scaricare con i propri account contenuti che si
 > è autorizzati a scaricare (es. distribuzioni Linux). Non implementa né intende
@@ -251,3 +251,19 @@ valida).
   pubblicazione): `./hoster` per Linux x86-64 è registrato, così dopo un
   `git clone` il programma è pronto anche su una macchina senza Go. `make` lo
   rigenera; la versione per ARM resta nelle release.
+
+### Manuali nello stile IR (30 settembre 2026)
+
+Su richiesta dell'utente i due manuali sono stati riscritti con stile,
+struttura e palette dei manuali di un altro suo progetto (IR), perché la
+documentazione dei suoi progetti abbia un aspetto unico.
+
+- **Nomi come i modelli**: `HOSTER_Manuale_Utente.html` e
+  `HOSTER_Manuale_Tecnico.html`. I vecchi indirizzi `manuale-*.html` non
+  esistono più.
+- **File unici**: ogni manuale contiene il proprio stile e il proprio
+  script. Spariscono `docs/assets` e la copia di Mermaid; i diagrammi sono
+  disegnati direttamente nella pagina.
+- **Ricerca e indice analitico conservati**: i modelli IR non li hanno, ma
+  l'utente ha scelto di tenerli, integrati nell'aspetto IR.
+- **Niente logo**: hoster non ne ha uno. In copertina c'è solo il nome.

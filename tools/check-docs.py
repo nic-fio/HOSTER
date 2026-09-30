@@ -19,8 +19,8 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DOCS = ROOT / "docs"
-USER = DOCS / "manuale-utente.html"
-TECH = DOCS / "manuale-tecnico.html"
+USER = DOCS / "HOSTER_Manuale_Utente.html"
+TECH = DOCS / "HOSTER_Manuale_Tecnico.html"
 
 errors = []
 
@@ -73,9 +73,9 @@ if not version:
 else:
     checks = {
         "README.md": rf"Versione {re.escape(version)}\b",
-        "docs/index.html": rf"<b>Versione</b> {re.escape(version)}\b",
-        "docs/manuale-utente.html": rf"<b>Versione</b> {re.escape(version)}\b",
-        "docs/manuale-tecnico.html": rf"<b>Versione</b> {re.escape(version)}\b",
+        "docs/index.html": rf"<span>Versione</span><b>{re.escape(version)}</b>",
+        "docs/HOSTER_Manuale_Utente.html": rf"<span>Versione</span><b>{re.escape(version)}</b>",
+        "docs/HOSTER_Manuale_Tecnico.html": rf"<span>Versione</span><b>{re.escape(version)}</b>",
     }
     for rel, pat in checks.items():
         if not re.search(pat, (ROOT / rel).read_text()):

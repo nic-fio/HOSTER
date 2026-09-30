@@ -32,7 +32,7 @@ Il perché di ciascuna è in [docs/decisioni-e-storia.md](docs/decisioni-e-stori
 | **File personali mai nel repository** | `account`, `links`, `LISTA_LINKS`, `passwords.txt` sono in `.gitignore`. Decisione dell'utente: le credenziali restano fuori del tutto, nemmeno cifrate. |
 | **L'eseguibile sta nel repository** | `./hoster` (Linux x86-64, statico) è registrato, così un `git clone` basta anche senza Go. Richiesta esplicita dell'utente. `make` lo rigenera. |
 | **Nessuna licenza** | Copyright nic-fio, tutti i diritti riservati; il codice è pubblico per poterlo leggere e recuperare. |
-| **Manuali in italiano, tema chiaro** | Stesso impianto di NG-EFI_SHELL (HTML in `docs/`, GitHub Pages), niente tema scuro. |
+| **Manuali in italiano, tema chiaro** | Stile, struttura e palette dei modelli IR (`IR_Manuale_*.html`): file HTML unici in `docs/` con CSS e script incorporati (ricerca e indice analitico), pubblicati con GitHub Pages; niente tema scuro, niente logo (solo il nome in copertina). |
 
 ## Il repository
 
@@ -40,7 +40,7 @@ Il perché di ciascuna è in [docs/decisioni-e-storia.md](docs/decisioni-e-stori
 |---|---|
 | `*.go` | Il programma (`package main`): vedi la mappa dei file nel manuale tecnico. |
 | `*_test.go` | 47 test senza rete + `TestLiveResolve` (solo con `HOSTER_LIVE=1`). |
-| `docs/` | `manuale-utente.html`, `manuale-tecnico.html`, `decisioni-e-storia.md`, `assets/`. Pubblicati con GitHub Pages. |
+| `docs/` | `HOSTER_Manuale_Utente.html`, `HOSTER_Manuale_Tecnico.html`, `index.html`, `decisioni-e-storia.md`. Pubblicati con GitHub Pages. |
 | `tools/` | `setup-dev.sh` (pacchetti e identità git), `backup.sh` (bundle git), `check-docs.py` (controlli dei manuali). |
 | `account.example`, `links.example` | Modelli dei file personali. |
 | `hoster` | L'eseguibile Linux x86-64, **registrato**: va rigenerato con `make` e registrato insieme a ogni modifica del codice. |

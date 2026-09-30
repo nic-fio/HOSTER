@@ -48,6 +48,7 @@ Il perché di ciascuna è in [docs/decisions-and-history.md](docs/decisions-and-
 | `*_test.go` | 47 test senza rete + `TestLiveResolve` (solo con `HOSTER_LIVE=1`). |
 | `docs/` | `User Manual.html`, `Technical Manual.html` (i manuali, in inglese), `index.html`, `decisions-and-history.md`. Pubblicati con GitHub Pages. |
 | `tools/` | `setup-dev.sh` (pacchetti e identità git), `backup.sh` (bundle git), `check-docs.py` (controlli dei manuali). |
+| `logos/` | `hoster-logo.png`, il logo (PNG 2172×724, sfondo trasparente). Non è usato nei manuali. |
 | `account.example`, `links.example` | Modelli dei file personali. |
 | `hoster` | L'eseguibile Linux x86-64, **registrato**: va rigenerato con `make` e registrato insieme a ogni modifica del codice. |
 | `dist/` | Binari per le release, mai registrati. |

@@ -200,7 +200,7 @@ func buildHelp(color bool, width int) string {
 	tp("account", "Credenziali: una riga per host, dominio:utente:password.")
 	tp("links", "Link da scaricare, uno per riga.")
 	tp("passwords.txt", "Password da provare per gli archivi (una per riga).")
-	tp("FILE.part / .part.hoster", "File parziale e metadati di ripresa (--continue).")
+	tp("FILE.part / .part.hoster", "File parziale e metadati di ripresa (-c).")
 
 	hdr("Stato di uscita")
 	tp("0", "Completato.")

@@ -10,7 +10,7 @@ dal repository, tranne i file personali (vedi sotto).
 - **Si parla con l'utente in italiano, sempre.** L'utente non capisce
   l'inglese: niente frasi di passaggio in inglese, nemmeno brevi. Anche
   codice, commenti, messaggi del programma, guida integrata (`help.go`) e i
-  documenti Markdown (`README.md`, `docs/README.md`, `decisioni-e-storia.md`,
+  documenti Markdown (`README.md`, `docs/README.md`, `decisions-and-history.md`,
   questo file) sono in italiano.
 - **I due manuali sono in inglese** (decisione del proprietario, 30 settembre
   2026): `docs/User Manual.html` e `docs/Technical Manual.html`. Quando citano
@@ -26,7 +26,7 @@ dal repository, tranne i file personali (vedi sotto).
 
 ## Decisioni prese: non riaprirle
 
-Il perché di ciascuna è in [docs/decisioni-e-storia.md](docs/decisioni-e-storia.md).
+Il perché di ciascuna è in [docs/decisions-and-history.md](docs/decisions-and-history.md).
 
 | Decisione | |
 |---|---|
@@ -46,11 +46,17 @@ Il perché di ciascuna è in [docs/decisioni-e-storia.md](docs/decisioni-e-stori
 |---|---|
 | `*.go` | Il programma (`package main`): vedi la mappa dei file nel manuale tecnico. |
 | `*_test.go` | 47 test senza rete + `TestLiveResolve` (solo con `HOSTER_LIVE=1`). |
-| `docs/` | `User Manual.html`, `Technical Manual.html` (i manuali, in inglese), `index.html`, `decisioni-e-storia.md`. Pubblicati con GitHub Pages. |
+| `docs/` | `User Manual.html`, `Technical Manual.html` (i manuali, in inglese), `index.html`, `decisions-and-history.md`. Pubblicati con GitHub Pages. |
 | `tools/` | `setup-dev.sh` (pacchetti e identità git), `backup.sh` (bundle git), `check-docs.py` (controlli dei manuali). |
 | `account.example`, `links.example` | Modelli dei file personali. |
 | `hoster` | L'eseguibile Linux x86-64, **registrato**: va rigenerato con `make` e registrato insieme a ogni modifica del codice. |
 | `dist/` | Binari per le release, mai registrati. |
+
+Il repository segue la struttura standard comune ai sette progetti (AMS,
+EFI_PARTITION_MANAGER, HOSTER, MTERM, NESH, PHONESTRA, SCRAPER): il codice Go
+alla radice, `tools/`, `docs/` (con `index.html`, i due manuali, `README.md`,
+`decisions-and-history.md`, `.nojekyll`), `NOTICE.md`, la CI e gli obiettivi
+comuni di `make`: `all`, `test`, `docs-check`, `clean`.
 
 ## Prima di registrare una modifica
 

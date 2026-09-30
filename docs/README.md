@@ -15,7 +15,7 @@ salvate in un repository. I manuali si leggono in uno di questi due modi.
 browser. Ogni manuale è un file unico che contiene stile, script (ricerca e
 indice analitico) e diagrammi, quindi funziona anche offline.
 
-[Decisioni e storia](decisioni-e-storia.md) è in Markdown, quindi GitHub lo
+[Decisioni e storia](decisions-and-history.md) è in Markdown, quindi GitHub lo
 mostra già formattato.
 
 Dentro il programma, `hoster --help` mostra la guida integrata a schede.
@@ -27,7 +27,7 @@ Dentro il programma, `hoster --help` mostra la guida integrata a schede.
 | `index.html` | Pagina iniziale del sito della documentazione. |
 | `User Manual.html` | Manuale utente, in inglese: installare e usare hoster; riferimento di tutte le opzioni. |
 | `Technical Manual.html` | Manuale tecnico, in inglese: architettura, funzionamento interno, test, convenzioni, limiti noti. |
-| `decisioni-e-storia.md` | Perché hoster è fatto così. |
+| `decisions-and-history.md` | Perché hoster è fatto così. |
 
 `tools/check-docs.py` (eseguito da `make test`) verifica che i manuali siano
 allineati al codice.

@@ -12,8 +12,9 @@ salvate in un repository. I manuali si leggono in uno di questi due modi.
 | Pagina iniziale | https://nic-fio.github.io/HOSTER/ |
 
 **Senza rete**: clona il repository e apri `docs/User Manual.html` nel
-browser. Ogni manuale è un file unico che contiene stile, script (ricerca e
-indice analitico) e diagrammi, quindi funziona anche offline.
+browser. Ogni manuale è un file unico che contiene stile (lo stile comune dei manuali
+dei sette progetti, identico in tutti), script (ricerca, indice analitico,
+pulsante Copy), logo e diagrammi, quindi funziona anche offline.
 
 [Decisioni e storia](decisions-and-history.md) è in Markdown, quindi GitHub lo
 mostra già formattato.

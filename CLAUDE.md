@@ -38,7 +38,7 @@ Il perché di ciascuna è in [docs/decisions-and-history.md](docs/decisions-and-
 | **File personali mai nel repository** | `account`, `links`, `LISTA_LINKS`, `passwords.txt` sono in `.gitignore`. Decisione dell'utente: le credenziali restano fuori del tutto, nemmeno cifrate. |
 | **L'eseguibile sta nel repository** | `./hoster` (Linux x86-64, statico) è registrato, così un `git clone` basta anche senza Go. Richiesta esplicita dell'utente. `make` lo rigenera. |
 | **Nessuna licenza** | Copyright nic-fio, tutti i diritti riservati; il codice è pubblico per poterlo leggere e recuperare. |
-| **Manuali in inglese, tema chiaro** | `docs/User Manual.html` e `docs/Technical Manual.html` (negli href lo spazio si scrive `%20`). Stile, struttura e palette dei modelli IR (`IR_Manuale_*.html`), da non toccare: file HTML unici in `docs/` con CSS e script incorporati (ricerca e indice analitico), pubblicati con GitHub Pages; niente tema scuro, niente logo (solo il nome in copertina). Programma e resto della documentazione restano in italiano. |
+| **Manuali in inglese, tema chiaro, stile comune** | `docs/User Manual.html` e `docs/Technical Manual.html` (negli href lo spazio si scrive `%20`): file HTML unici in `docs/`, pubblicati con GitHub Pages; niente tema scuro. Stile comune dei manuali dei 7 progetti, approvato dal proprietario il 1° ottobre 2026: il canone è incorporato in ogni manuale ed è identico in tutti, byte per byte. Il `<style>` comincia con il CSS comune (`manual.css`, commento iniziale «Stile comune dei manuali dei 7 progetti»); l'ultimo `<script>` è lo script comune (`manual.js`: ricerca, indice analitico, pulsante Copy), preceduto da `window.MANUAL_CODE_TERMS` (le voci dell'indice da mostrare come codice). Non si modificano in un solo progetto: un cambio vale per tutti e sette. Copertina: logo (copia ridotta di `logos/hoster-logo.png`, incorporata), «User Manual»/«Technical Manual», Version e Date; piè di pagina `hoster · User Manual · Version X · Mese AAAA · © 2026 Nicola Fiorillo`. Programma e resto della documentazione restano in italiano. |
 
 ## Il repository
 
@@ -48,7 +48,7 @@ Il perché di ciascuna è in [docs/decisions-and-history.md](docs/decisions-and-
 | `*_test.go` | 47 test senza rete + `TestLiveResolve` (solo con `HOSTER_LIVE=1`). |
 | `docs/` | `User Manual.html`, `Technical Manual.html` (i manuali, in inglese), `index.html`, `decisions-and-history.md`. Pubblicati con GitHub Pages. |
 | `tools/` | `setup-dev.sh` (pacchetti e identità git), `backup.sh` (bundle git), `check-docs.py` (controlli dei manuali). |
-| `logos/` | `hoster-logo.png`, il logo (PNG 2172×724, sfondo trasparente). Non è usato nei manuali. |
+| `logos/` | `hoster-logo.png`, il logo (PNG 2172×724, sfondo trasparente). Nella copertina dei manuali ce n'è una copia ridotta (700 px, 256 colori), incorporata. |
 | `account.example`, `links.example` | Modelli dei file personali. |
 | `hoster` | L'eseguibile Linux x86-64, **registrato**: va rigenerato con `make` e registrato insieme a ogni modifica del codice. |
 | `dist/` | Binari per le release, mai registrati. |
@@ -77,7 +77,7 @@ comuni di `make`: `all`, `test`, `docs-check`, `clean`.
    (indirizzo noreply di GitHub), che tiene fuori quello personale.
 
 Rilascio: aggiorna la versione in `help.go` (`"hoster 1.0"`), in `README.md`,
-`docs/index.html` e nei due manuali, poi crea un tag annotato `vX.Y.Z` e fai
+`docs/index.html` e nei due manuali (copertina e piè di pagina), poi crea un tag annotato `vX.Y.Z` e fai
 push del tag: la CI costruisce i binari Linux amd64/arm64 e pubblica la
 release, con il messaggio del tag come note.
 

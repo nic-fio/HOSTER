@@ -1,7 +1,8 @@
-<!doctype html><html lang="en" class="no-js"><head><meta charset="utf-8">
+<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>Technical Manual — hoster</title>
 <meta name="description" content="Technical manual for hoster: architecture, XFileSharing resolver, download engine, TLS fallback, extraction, interface, tests, build and known limitations.">
-<style>
+<style>/* Stile comune dei manuali dei 7 progetti (nic-fio). Uguale byte per byte in tutti i manuali: non modificare in un solo progetto. */
+/* Base: style.css di AMS */
 *{box-sizing:border-box} html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 body{margin:0;background:#e9edf2;color:#111827;font-family:Outfit,-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-size:15px;line-height:1.62}
 .doc{max-width:1320px;margin:0 auto;background:#fff;box-shadow:0 1px 30px rgba(15,23,42,.10)}
@@ -10,8 +11,6 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:
 /* Cover */
 .cover{position:relative;padding:64px 56px;min-height:56vh;background:linear-gradient(135deg,#0050C0 0%,#003a90 100%);color:#fff;overflow:hidden}
 .cover-logo{margin-bottom:38px;position:relative;z-index:2}
-.cover-word{display:inline-block;font-size:44px;font-weight:800;letter-spacing:-.01em;color:#fff;line-height:1;padding-bottom:10px;border-bottom:4px solid #8fb6ff}
-
 .cover-kicker{text-transform:uppercase;letter-spacing:.24em;font-size:12px;font-weight:700;color:#9dc0ff;margin-bottom:14px;position:relative;z-index:2}
 .cover-title{font-size:56px;line-height:1.02;margin:0 0 12px;font-weight:800;letter-spacing:-.02em;position:relative;z-index:2}
 .cover-sub{font-size:19px;color:#cfe0ff;max-width:32em;margin-bottom:44px;position:relative;z-index:2}
@@ -74,60 +73,95 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:
  a{color:inherit}
 }
 
-.code{tab-size:4;-moz-tab-size:4}
-/* hoster: correzioni del modello e aggiunte (ricerca, indice analitico) */
-.fig{display:block}
-figure.tbl-wrap{margin:18px 0}
-.tbl td code{white-space:nowrap}
-.no-js .js-only{display:none}
-.search{margin:0 0 26px}.search .toc-head{display:block}
-.search-label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#64748b;font-weight:700;margin-bottom:6px}
-.search input{width:100%;padding:8px 11px;border:1px solid #cbd5e1;border-radius:8px;font:inherit;font-size:14px;background:#fff;color:#111827}
-.search input:focus{outline:none;border-color:#0050C0;box-shadow:0 0 0 3px #0050c022}
-.search-info{font-size:12px;color:#64748b;margin:6px 2px 0}
-.search-results{list-style:none;margin:8px 0 0;padding:0}
-.search-results a{display:block;padding:7px 9px;border-radius:7px;color:#0f172a;border:1px solid transparent}
-.search-results a:hover,.search-results a.sel{background:#eff6ff;border-color:#bfdbfe}
-.search-results b{display:block;font-size:13px;color:#003a90}
-.search-results span{display:block;font-size:12px;color:#64748b;line-height:1.4}
-.toc-list li.toc-dim a{opacity:.35}
-mark.hl{background:#fde68a;color:inherit;padding:0 1px;border-radius:2px}
-.idx{columns:3 220px;column-gap:36px;margin-top:10px}
-.idx-letter{break-inside:avoid;margin:0 0 16px}
-.idx-letter h4{margin:0 0 6px!important;font-size:18px!important;color:#0050C0!important;border-bottom:2px solid #e5e7eb;padding-bottom:2px}
-.idx-letter ul{list-style:none;margin:0;padding:0}
-.idx-letter li{font-size:13.5px;margin:3px 0;break-inside:avoid}
-.idx-letter li a{font-size:11.5px;font-weight:700;background:#eff6ff;color:#0050C0;border-radius:4px;padding:0 5px;margin-left:4px;font-variant-numeric:tabular-nums}
-.idx-nojs{color:#64748b;font-style:italic;column-span:all}
-.js .idx-nojs{display:none}
+/* Aggiunte comuni */
+/* Manuale utente: etichette dell'interfaccia e procedure */
+.ui{font-weight:600;color:#003a90;background:#eff6ff;border:1px solid #bfdbfe;border-radius:5px;padding:.02em .4em;font-size:.93em;white-space:nowrap}
+.steps{counter-reset:st;list-style:none;margin:14px 0;padding:0}
+.steps>li{counter-increment:st;position:relative;padding:8px 0 8px 44px;margin:0;border-left:2px solid #dbeafe;margin-left:15px}
+.steps>li:before{content:counter(st);position:absolute;left:-16px;top:6px;width:30px;height:30px;border-radius:50%;background:#0050C0;color:#fff;font-weight:800;text-align:center;line-height:30px;font-size:14px}
+.steps>li:last-child{border-left-color:transparent}
+
+/* tasti, etichette, codice */
+kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.82em;background:#fff;border:1px solid #cbd5e1;border-bottom-width:2px;border-radius:5px;padding:.05em .4em;color:#0f172a;white-space:nowrap}
+.code .p{color:#64748b;user-select:none}
+.badge{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#fff;background:#16a34a;border-radius:4px;padding:1px 7px;margin-right:6px}
+.deflist .dt-t{font-family:Outfit,-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-size:15px}
+.deflist dt[id]{scroll-margin-top:16px} .sec{scroll-margin-top:12px}
+/* ricerca nella barra laterale */
+.srch{margin:0 0 26px}
+.srch .toc-head{display:block}
+.srch-q{width:100%;font:inherit;font-size:14px;padding:8px 11px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;color:#0f172a;outline:none}
+.srch-q:focus{border-color:#0050C0;box-shadow:0 0 0 3px #dbeafe}
+.srch-info{font-size:12px;color:#64748b;margin:6px 2px 0;min-height:1em}
+.srch-res{list-style:none;margin:8px 0 0;padding:0}
+.srch-res li{margin:0}
+.srch-res a{display:block;padding:7px 9px;border-radius:7px;border-left:3px solid transparent;color:#334155}
+.srch-res a:hover,.srch-res a.on{background:#eff6ff;border-left-color:#0050C0}
+.srch-res .r-t{display:flex;gap:8px;font-weight:700;font-size:13px;color:#0f172a}
+.srch-res .r-t .toc-n{flex:0 0 auto}
+.srch-res .r-s{display:block;font-size:12px;color:#64748b;line-height:1.45;margin-top:2px}
+.srch-res mark,mark.hit{background:#fde68a;color:inherit;border-radius:2px;padding:0 1px}
+.toc-list.filtering li{opacity:.35} .toc-list.filtering li.toc-hit{opacity:1}
+.toc-list.filtering li.toc-hit a{color:#0050C0}
+.sec.flash{animation:flash 1.6s ease-out}
+@keyframes flash{0%{background:#eff6ff}100%{background:transparent}}
+/* indice analitico */
+.idx{columns:2 300px;column-gap:40px;margin-top:18px}
+.idx-g{break-inside:avoid;margin:0 0 18px}
+.idx-l{font-size:14px;text-transform:uppercase;letter-spacing:.14em;color:#003a90;font-weight:800;margin:0 0 6px;padding-bottom:4px;border-bottom:2px solid #0050C0}
+.idx-ul{list-style:none;margin:0;padding:0}
+.idx-ul li{margin:3px 0;font-size:14px;color:#334155;break-inside:avoid}
+.idx-t{font-weight:700;color:#0f172a}
+.idx-t code{font-weight:600}
+.idx-ul a{font-size:13px;white-space:nowrap}
+/* schermi stretti */
 @media (max-width:900px){
  .with-side{display:block} .side{width:auto;border-right:0;border-bottom:1px solid #e5e7eb}
- .side-inner{position:static;max-height:none;padding:20px 16px}
- .main{padding:28px 16px} .cover{padding:40px 20px} .cover-title{font-size:40px} .cover-meta{flex-wrap:wrap;gap:18px}
+ .side-inner{position:static;max-height:none;padding:24px 16px}
+ .main{padding:28px 16px}
+ .tbl-wrap{overflow-x:auto}
 }
-@media print{ mark.hl{background:none} .idx{columns:3} }
+@media print{ .srch{display:none} mark.hit{background:none} .idx{columns:2} }
+
+/* ---- Stile comune dei manuali: copertina (variante 3) ---- */
+.cover.cover-w{background:#fff;color:#0b2a5b;border-bottom:4px solid #0050C0;padding:44px 56px 46px;min-height:auto}
+.cover-w .cover-logo{margin-bottom:30px}
+.cover-w .cover-logo img{height:76px;width:auto;display:block}
+.cover-w .cover-title{color:#003a90}
+.cover-w .cover-meta{margin-top:30px}
+.cover-w .cover-meta span{color:#5a6f93}
+.cover-w .cover-meta b{color:#0b2a5b}
+/* ---- Stile comune: pulsante Copy sui blocchi di comandi ---- */
+.code-w{position:relative;margin:14px 0}
+.code-w>.code{margin:0;padding-right:78px}
+.copy{position:absolute;top:9px;right:9px;font:600 11px/1 Outfit,-apple-system,Segoe UI,Roboto,Arial,sans-serif;letter-spacing:.04em;color:#cbd5e1;background:#1e293b;border:1px solid #334155;border-radius:6px;padding:5px 9px;cursor:pointer}
+.copy:after{content:attr(data-l)}
+.copy:hover,.copy:focus-visible{color:#fff;border-color:#64748b;outline:none}
+.copy.ok{color:#86efac;border-color:#16a34a}
+/* ---- Stile comune: schermi stretti ---- */
+@media (max-width:900px){
+ .cover.cover-w{padding:32px 16px 34px}
+ .cover-w .cover-logo{margin-bottom:22px}
+ .cover-w .cover-logo img{height:60px}
+ .cover-w .cover-title{font-size:42px}
+ .cover-w .cover-meta{margin-top:22px;gap:28px}
+ .doc-foot{padding:18px 16px}
+}
+@media print{ .copy{display:none} .code-w>.code{padding-right:18px} }
 </style></head><body>
 <div class="doc">
-  <section class="cover">
-    <div class="cover-logo"><span class="cover-word">hoster</span></div>
-    <div class="cover-kicker">Technical documentation</div>
+  <section class="cover cover-w">
+    <div class="cover-logo"><img src="data:image/png;base64,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" alt="hoster"></div>
     <h1 class="cover-title">Technical Manual</h1>
-    <div class="cover-sub">hoster · Multi-host download manager for the terminal, for XFileSharing sites with premium accounts</div>
     <div class="cover-meta">
       <div><span>Version</span><b>1.0</b></div>
       <div><span>Date</span><b>September 2026</b></div>
-      <div><span>Status</span><b>Stable</b></div>
-      <div><span>Language</span><b>Go 1.24</b></div>
     </div>
-    <div class="cover-swoosh"></div>
   </section>
   <div class="with-side">
     <aside class="side"><div class="side-inner">
-      <div class="search js-only" role="search"><label class="toc-head" for="search-input">Search</label>
-        <input id="search-input" type="search" placeholder="A word, a function…  ( / )" autocomplete="off">
-        <div class="search-info" id="search-info" aria-live="polite"></div>
-        <ul class="search-results" id="search-results"></ul></div>
-      <h2 class="toc-head" id="contents">Contents</h2><ul class="toc-list"><li class="toc-ch"><a href="#panoramica"><span class="toc-n">1</span><span class="toc-t">Introduction and concepts</span></a></li><li class="toc-se"><a href="#cosa-copre"><span class="toc-n">1.1</span><span class="toc-t">What hoster is</span></a></li><li class="toc-se"><a href="#principi"><span class="toc-n">1.2</span><span class="toc-t">Principles</span></a></li><li class="toc-se"><a href="#sottosistemi"><span class="toc-n">1.3</span><span class="toc-t">Subsystems at a glance</span></a></li><li class="toc-se"><a href="#mappa-file"><span class="toc-n">1.4</span><span class="toc-t">File map</span></a></li><li class="toc-ch"><a href="#architettura"><span class="toc-n">2</span><span class="toc-t">Overall architecture</span></a></li><li class="toc-se"><a href="#componenti"><span class="toc-n">2.1</span><span class="toc-t">Components</span></a></li><li class="toc-se"><a href="#esecuzione"><span class="toc-n">2.2</span><span class="toc-t">A run</span></a></li><li class="toc-se"><a href="#concorrenza"><span class="toc-n">2.3</span><span class="toc-t">Concurrency and shared state</span></a></li><li class="toc-se"><a href="#output"><span class="toc-n">2.4</span><span class="toc-t">Where the output goes</span></a></li><li class="toc-ch"><a href="#avvio"><span class="toc-n">3</span><span class="toc-t">Startup and configuration</span></a></li><li class="toc-se"><a href="#sequenza-avvio"><span class="toc-n">3.1</span><span class="toc-t">The startup sequence</span></a></li><li class="toc-se"><a href="#opzioni"><span class="toc-n">3.2</span><span class="toc-t">The options and where they act</span></a></li><li class="toc-se"><a href="#dlconfig"><span class="toc-n">3.3</span><span class="toc-t">From the options to the engine: DLConfig</span></a></li><li class="toc-se"><a href="#modalita"><span class="toc-n">3.4</span><span class="toc-t">Special modes</span></a></li><li class="toc-se"><a href="#stati-uscita"><span class="toc-n">3.5</span><span class="toc-t">Exit statuses</span></a></li><li class="toc-ch"><a href="#account-link"><span class="toc-n">4</span><span class="toc-t">Accounts and links</span></a></li><li class="toc-se"><a href="#formato-account"><span class="toc-n">4.1</span><span class="toc-t">Format of <code>account</code></span></a></li><li class="toc-se"><a href="#lookup"><span class="toc-n">4.2</span><span class="toc-t">Matching host ↔ account</span></a></li><li class="toc-se"><a href="#formato-link"><span class="toc-n">4.3</span><span class="toc-t">Format of <code>links</code></span></a></li><li class="toc-ch"><a href="#resolver"><span class="toc-n">5</span><span class="toc-t">The resolver</span></a></li><li class="toc-se"><a href="#client-resolver"><span class="toc-n">5.1</span><span class="toc-t">The resolver's client</span></a></li><li class="toc-se"><a href="#login"><span class="toc-n">5.2</span><span class="toc-t">Login</span></a></li><li class="toc-se"><a href="#resolve"><span class="toc-n">5.3</span><span class="toc-t">Resolution</span></a></li><li class="toc-se"><a href="#nome-file"><span class="toc-n">5.4</span><span class="toc-t">File name</span></a></li><li class="toc-se"><a href="#euristiche"><span class="toc-n">5.5</span><span class="toc-t">HTML heuristics</span></a></li><li class="toc-se"><a href="#debug"><span class="toc-n">5.6</span><span class="toc-t">Debug dump</span></a></li><li class="toc-ch"><a href="#tls"><span class="toc-n">6</span><span class="toc-t">The TLS fallback</span></a></li><li class="toc-se"><a href="#tls-problema"><span class="toc-n">6.1</span><span class="toc-t">The problem: incomplete chains</span></a></li><li class="toc-se"><a href="#tls-trasporto"><span class="toc-n">6.2</span><span class="toc-t">tlsFallbackTransport</span></a></li><li class="toc-se"><a href="#tls-limiti"><span class="toc-n">6.3</span><span class="toc-t">What is still rejected</span></a></li><li class="toc-ch"><a href="#download"><span class="toc-n">7</span><span class="toc-t">The download engine</span></a></li><li class="toc-se"><a href="#client-download"><span class="toc-n">7.1</span><span class="toc-t">The client</span></a></li><li class="toc-se"><a href="#sonda"><span class="toc-n">7.2</span><span class="toc-t">The probe</span></a></li><li class="toc-se"><a href="#downloadfile"><span class="toc-n">7.3</span><span class="toc-t">downloadFile</span></a></li><li class="toc-se"><a href="#flusso-singolo"><span class="toc-n">7.4</span><span class="toc-t">Single stream</span></a></li><li class="toc-se"><a href="#segmentato"><span class="toc-n">7.5</span><span class="toc-t">Segmented download</span></a></li><li class="toc-se"><a href="#tentativi"><span class="toc-n">7.6</span><span class="toc-t">Attempts</span></a></li><li class="toc-se"><a href="#banda-tecnica"><span class="toc-n">7.7</span><span class="toc-t">Bandwidth limit</span></a></li><li class="toc-ch"><a href="#avanzamento"><span class="toc-n">8</span><span class="toc-t">Progress and terminal interface</span></a></li><li class="toc-se"><a href="#barre"><span class="toc-n">8.1</span><span class="toc-t">Progress bars</span></a></li><li class="toc-se"><a href="#log"><span class="toc-n">8.2</span><span class="toc-t">Messages above the bars</span></a></li><li class="toc-se"><a href="#quiet"><span class="toc-n">8.3</span><span class="toc-t">Quiet mode and colors</span></a></li><li class="toc-se"><a href="#guida"><span class="toc-n">8.4</span><span class="toc-t">Built-in guide: one source, three views</span></a></li><li class="toc-se"><a href="#tui"><span class="toc-n">8.5</span><span class="toc-t">The tabbed TUI</span></a></li><li class="toc-se"><a href="#terminale"><span class="toc-n">8.6</span><span class="toc-t">Terminal primitives</span></a></li><li class="toc-ch"><a href="#estrazione"><span class="toc-n">9</span><span class="toc-t">Extraction</span></a></li><li class="toc-se"><a href="#set"><span class="toc-n">9.1</span><span class="toc-t">Finding the sets</span></a></li><li class="toc-se"><a href="#ordine-password"><span class="toc-n">9.2</span><span class="toc-t">Passwords and order of attempts</span></a></li><li class="toc-se"><a href="#decoder"><span class="toc-n">9.3</span><span class="toc-t">Internal decoder and external tools</span></a></li><li class="toc-se"><a href="#safejoin"><span class="toc-n">9.4</span><span class="toc-t">Path safety</span></a></li><li class="toc-se"><a href="#cleanup-tecnico"><span class="toc-n">9.5</span><span class="toc-t">Cleanup</span></a></li><li class="toc-ch"><a href="#test"><span class="toc-n">10</span><span class="toc-t">Tests</span></a></li><li class="toc-se"><a href="#suite"><span class="toc-n">10.1</span><span class="toc-t">The suite</span></a></li><li class="toc-se"><a href="#fittizi"><span class="toc-n">10.2</span><span class="toc-t">Fake servers</span></a></li><li class="toc-se"><a href="#test-vivo"><span class="toc-n">10.3</span><span class="toc-t">The live test</span></a></li><li class="toc-se"><a href="#controlli-doc"><span class="toc-n">10.4</span><span class="toc-t">Documentation checks</span></a></li><li class="toc-ch"><a href="#repository"><span class="toc-n">11</span><span class="toc-t">Build, CI and release</span></a></li><li class="toc-se"><a href="#struttura"><span class="toc-n">11.1</span><span class="toc-t">Repository structure</span></a></li><li class="toc-se"><a href="#build"><span class="toc-n">11.2</span><span class="toc-t">Build</span></a></li><li class="toc-se"><a href="#ci-release"><span class="toc-n">11.3</span><span class="toc-t">CI and releases</span></a></li><li class="toc-se"><a href="#recupero-tecnico"><span class="toc-n">11.4</span><span class="toc-t">Recovery and backup</span></a></li><li class="toc-se"><a href="#manuali"><span class="toc-n">11.5</span><span class="toc-t">The manuals</span></a></li><li class="toc-se"><a href="#convenzioni"><span class="toc-n">11.6</span><span class="toc-t">Conventions</span></a></li><li class="toc-ch"><a href="#aggiungere-sito"><span class="toc-n">12</span><span class="toc-t">How to add a site</span></a></li><li class="toc-se"><a href="#sito-ciclo"><span class="toc-n">12.1</span><span class="toc-t">The work cycle</span></a></li><li class="toc-se"><a href="#sito-dove"><span class="toc-n">12.2</span><span class="toc-t">Where to intervene</span></a></li><li class="toc-ch"><a href="#limiti"><span class="toc-n">13</span><span class="toc-t">Known limitations</span></a></li><li class="toc-se"><a href="#limiti-noti"><span class="toc-n">13.1</span><span class="toc-t">Known limitations</span></a></li><li class="toc-se"><a href="#osservazioni"><span class="toc-n">13.2</span><span class="toc-t">Observations from reading the code</span></a></li><li class="toc-se"><a href="#idee"><span class="toc-n">13.3</span><span class="toc-t">Ideas for the future</span></a></li><li class="toc-ch"><a href="#appendice"><span class="toc-n">14</span><span class="toc-t">Appendix A — Data structures</span></a></li><li class="toc-se"><a href="#strutture"><span class="toc-n">14.1</span><span class="toc-t">Index of data structures</span></a></li><li class="toc-se"><a href="#resolved"><span class="toc-n">14.2</span><span class="toc-t">Resolved and filePage</span></a></li><li class="toc-se"><a href="#dlconfig-campi"><span class="toc-n">14.3</span><span class="toc-t">DLConfig and probeInfo</span></a></li><li class="toc-se"><a href="#segmeta"><span class="toc-n">14.4</span><span class="toc-t">seg, segMeta and the files on disk</span></a></li><li class="toc-se"><a href="#fileprog"><span class="toc-n">14.5</span><span class="toc-t">Progress and fileProg</span></a></li><li class="toc-ch"><a href="#glossario"><span class="toc-n">15</span><span class="toc-t">Glossary</span></a></li><li class="toc-se"><a href="#glossario-al"><span class="toc-n">15.1</span><span class="toc-t">Terms A–L</span></a></li><li class="toc-se"><a href="#glossario-mz"><span class="toc-n">15.2</span><span class="toc-t">Terms M–Z</span></a></li><li class="toc-ch"><a href="#index"><span class="toc-n">16</span><span class="toc-t">Index</span></a></li><li class="toc-se"><a href="#index-termini"><span class="toc-n">16.1</span><span class="toc-t">Terms, functions and files</span></a></li></ul>
+      <div class="srch" id="srch" hidden><label class="toc-head" for="srch-q">Search</label><input type="search" id="srch-q" class="srch-q" placeholder="A word, a function…  ( / )" autocomplete="off" spellcheck="false"><div class="srch-info" id="srch-info" aria-live="polite"></div><ol class="srch-res" id="srch-res"></ol></div>
+      <h2 class="toc-head" id="contents">Contents</h2><ul class="toc-list" id="toc"><li class="toc-ch"><a href="#panoramica"><span class="toc-n">1</span><span class="toc-t">Introduction and concepts</span></a></li><li class="toc-se"><a href="#cosa-copre"><span class="toc-n">1.1</span><span class="toc-t">What hoster is</span></a></li><li class="toc-se"><a href="#principi"><span class="toc-n">1.2</span><span class="toc-t">Principles</span></a></li><li class="toc-se"><a href="#sottosistemi"><span class="toc-n">1.3</span><span class="toc-t">Subsystems at a glance</span></a></li><li class="toc-se"><a href="#mappa-file"><span class="toc-n">1.4</span><span class="toc-t">File map</span></a></li><li class="toc-ch"><a href="#architettura"><span class="toc-n">2</span><span class="toc-t">Overall architecture</span></a></li><li class="toc-se"><a href="#componenti"><span class="toc-n">2.1</span><span class="toc-t">Components</span></a></li><li class="toc-se"><a href="#esecuzione"><span class="toc-n">2.2</span><span class="toc-t">A run</span></a></li><li class="toc-se"><a href="#concorrenza"><span class="toc-n">2.3</span><span class="toc-t">Concurrency and shared state</span></a></li><li class="toc-se"><a href="#output"><span class="toc-n">2.4</span><span class="toc-t">Where the output goes</span></a></li><li class="toc-ch"><a href="#avvio"><span class="toc-n">3</span><span class="toc-t">Startup and configuration</span></a></li><li class="toc-se"><a href="#sequenza-avvio"><span class="toc-n">3.1</span><span class="toc-t">The startup sequence</span></a></li><li class="toc-se"><a href="#opzioni"><span class="toc-n">3.2</span><span class="toc-t">The options and where they act</span></a></li><li class="toc-se"><a href="#dlconfig"><span class="toc-n">3.3</span><span class="toc-t">From the options to the engine: DLConfig</span></a></li><li class="toc-se"><a href="#modalita"><span class="toc-n">3.4</span><span class="toc-t">Special modes</span></a></li><li class="toc-se"><a href="#stati-uscita"><span class="toc-n">3.5</span><span class="toc-t">Exit statuses</span></a></li><li class="toc-ch"><a href="#account-link"><span class="toc-n">4</span><span class="toc-t">Accounts and links</span></a></li><li class="toc-se"><a href="#formato-account"><span class="toc-n">4.1</span><span class="toc-t">Format of <code>account</code></span></a></li><li class="toc-se"><a href="#lookup"><span class="toc-n">4.2</span><span class="toc-t">Matching host ↔ account</span></a></li><li class="toc-se"><a href="#formato-link"><span class="toc-n">4.3</span><span class="toc-t">Format of <code>links</code></span></a></li><li class="toc-ch"><a href="#resolver"><span class="toc-n">5</span><span class="toc-t">The resolver</span></a></li><li class="toc-se"><a href="#client-resolver"><span class="toc-n">5.1</span><span class="toc-t">The resolver's client</span></a></li><li class="toc-se"><a href="#login"><span class="toc-n">5.2</span><span class="toc-t">Login</span></a></li><li class="toc-se"><a href="#resolve"><span class="toc-n">5.3</span><span class="toc-t">Resolution</span></a></li><li class="toc-se"><a href="#nome-file"><span class="toc-n">5.4</span><span class="toc-t">File name</span></a></li><li class="toc-se"><a href="#euristiche"><span class="toc-n">5.5</span><span class="toc-t">HTML heuristics</span></a></li><li class="toc-se"><a href="#debug"><span class="toc-n">5.6</span><span class="toc-t">Debug dump</span></a></li><li class="toc-ch"><a href="#tls"><span class="toc-n">6</span><span class="toc-t">The TLS fallback</span></a></li><li class="toc-se"><a href="#tls-problema"><span class="toc-n">6.1</span><span class="toc-t">The problem: incomplete chains</span></a></li><li class="toc-se"><a href="#tls-trasporto"><span class="toc-n">6.2</span><span class="toc-t">tlsFallbackTransport</span></a></li><li class="toc-se"><a href="#tls-limiti"><span class="toc-n">6.3</span><span class="toc-t">What is still rejected</span></a></li><li class="toc-ch"><a href="#download"><span class="toc-n">7</span><span class="toc-t">The download engine</span></a></li><li class="toc-se"><a href="#client-download"><span class="toc-n">7.1</span><span class="toc-t">The client</span></a></li><li class="toc-se"><a href="#sonda"><span class="toc-n">7.2</span><span class="toc-t">The probe</span></a></li><li class="toc-se"><a href="#downloadfile"><span class="toc-n">7.3</span><span class="toc-t">downloadFile</span></a></li><li class="toc-se"><a href="#flusso-singolo"><span class="toc-n">7.4</span><span class="toc-t">Single stream</span></a></li><li class="toc-se"><a href="#segmentato"><span class="toc-n">7.5</span><span class="toc-t">Segmented download</span></a></li><li class="toc-se"><a href="#tentativi"><span class="toc-n">7.6</span><span class="toc-t">Attempts</span></a></li><li class="toc-se"><a href="#banda-tecnica"><span class="toc-n">7.7</span><span class="toc-t">Bandwidth limit</span></a></li><li class="toc-ch"><a href="#avanzamento"><span class="toc-n">8</span><span class="toc-t">Progress and terminal interface</span></a></li><li class="toc-se"><a href="#barre"><span class="toc-n">8.1</span><span class="toc-t">Progress bars</span></a></li><li class="toc-se"><a href="#log"><span class="toc-n">8.2</span><span class="toc-t">Messages above the bars</span></a></li><li class="toc-se"><a href="#quiet"><span class="toc-n">8.3</span><span class="toc-t">Quiet mode and colors</span></a></li><li class="toc-se"><a href="#guida"><span class="toc-n">8.4</span><span class="toc-t">Built-in guide: one source, three views</span></a></li><li class="toc-se"><a href="#tui"><span class="toc-n">8.5</span><span class="toc-t">The tabbed TUI</span></a></li><li class="toc-se"><a href="#terminale"><span class="toc-n">8.6</span><span class="toc-t">Terminal primitives</span></a></li><li class="toc-ch"><a href="#estrazione"><span class="toc-n">9</span><span class="toc-t">Extraction</span></a></li><li class="toc-se"><a href="#set"><span class="toc-n">9.1</span><span class="toc-t">Finding the sets</span></a></li><li class="toc-se"><a href="#ordine-password"><span class="toc-n">9.2</span><span class="toc-t">Passwords and order of attempts</span></a></li><li class="toc-se"><a href="#decoder"><span class="toc-n">9.3</span><span class="toc-t">Internal decoder and external tools</span></a></li><li class="toc-se"><a href="#safejoin"><span class="toc-n">9.4</span><span class="toc-t">Path safety</span></a></li><li class="toc-se"><a href="#cleanup-tecnico"><span class="toc-n">9.5</span><span class="toc-t">Cleanup</span></a></li><li class="toc-ch"><a href="#test"><span class="toc-n">10</span><span class="toc-t">Tests</span></a></li><li class="toc-se"><a href="#suite"><span class="toc-n">10.1</span><span class="toc-t">The suite</span></a></li><li class="toc-se"><a href="#fittizi"><span class="toc-n">10.2</span><span class="toc-t">Fake servers</span></a></li><li class="toc-se"><a href="#test-vivo"><span class="toc-n">10.3</span><span class="toc-t">The live test</span></a></li><li class="toc-se"><a href="#controlli-doc"><span class="toc-n">10.4</span><span class="toc-t">Documentation checks</span></a></li><li class="toc-ch"><a href="#repository"><span class="toc-n">11</span><span class="toc-t">Build, CI and release</span></a></li><li class="toc-se"><a href="#struttura"><span class="toc-n">11.1</span><span class="toc-t">Repository structure</span></a></li><li class="toc-se"><a href="#build"><span class="toc-n">11.2</span><span class="toc-t">Build</span></a></li><li class="toc-se"><a href="#ci-release"><span class="toc-n">11.3</span><span class="toc-t">CI and releases</span></a></li><li class="toc-se"><a href="#recupero-tecnico"><span class="toc-n">11.4</span><span class="toc-t">Recovery and backup</span></a></li><li class="toc-se"><a href="#manuali"><span class="toc-n">11.5</span><span class="toc-t">The manuals</span></a></li><li class="toc-se"><a href="#convenzioni"><span class="toc-n">11.6</span><span class="toc-t">Conventions</span></a></li><li class="toc-ch"><a href="#aggiungere-sito"><span class="toc-n">12</span><span class="toc-t">How to add a site</span></a></li><li class="toc-se"><a href="#sito-ciclo"><span class="toc-n">12.1</span><span class="toc-t">The work cycle</span></a></li><li class="toc-se"><a href="#sito-dove"><span class="toc-n">12.2</span><span class="toc-t">Where to intervene</span></a></li><li class="toc-ch"><a href="#limiti"><span class="toc-n">13</span><span class="toc-t">Known limitations</span></a></li><li class="toc-se"><a href="#limiti-noti"><span class="toc-n">13.1</span><span class="toc-t">Known limitations</span></a></li><li class="toc-se"><a href="#osservazioni"><span class="toc-n">13.2</span><span class="toc-t">Observations from reading the code</span></a></li><li class="toc-se"><a href="#idee"><span class="toc-n">13.3</span><span class="toc-t">Ideas for the future</span></a></li><li class="toc-ch"><a href="#appendice"><span class="toc-n">14</span><span class="toc-t">Appendix A — Data structures</span></a></li><li class="toc-se"><a href="#strutture"><span class="toc-n">14.1</span><span class="toc-t">Index of data structures</span></a></li><li class="toc-se"><a href="#resolved"><span class="toc-n">14.2</span><span class="toc-t">Resolved and filePage</span></a></li><li class="toc-se"><a href="#dlconfig-campi"><span class="toc-n">14.3</span><span class="toc-t">DLConfig and probeInfo</span></a></li><li class="toc-se"><a href="#segmeta"><span class="toc-n">14.4</span><span class="toc-t">seg, segMeta and the files on disk</span></a></li><li class="toc-se"><a href="#fileprog"><span class="toc-n">14.5</span><span class="toc-t">Progress and fileProg</span></a></li><li class="toc-ch"><a href="#glossario"><span class="toc-n">15</span><span class="toc-t">Glossary</span></a></li><li class="toc-se"><a href="#glossario-al"><span class="toc-n">15.1</span><span class="toc-t">Terms A–L</span></a></li><li class="toc-se"><a href="#glossario-mz"><span class="toc-n">15.2</span><span class="toc-t">Terms M–Z</span></a></li><li class="toc-ch"><a href="#index"><span class="toc-n">16</span><span class="toc-t">Index</span></a></li><li class="toc-se"><a href="#index-termini"><span class="toc-n">16.1</span><span class="toc-t">Terms, functions and files</span></a></li></ul>
     </div></aside>
     <main class="main"><section class="chapter" id="panoramica"><div class="ch-head"><span class="ch-kick">Chapter 1</span><h2 class="h-ch">Introduction and concepts</h2></div><section class="sec" id="cosa-copre"><h3 class="h-sec" data-index="hoster;purpose of the manual">1.1 · What hoster is</h3><p class="lead"><b>hoster</b> is a terminal-based <i>multi-host download manager</i>, in the style of JDownloader but without Java:
 a single static executable that reads an accounts file and a list of links, signs in once per site, works out
@@ -505,9 +539,10 @@ address; <code>HOSTER_GIT_NAME</code> and <code>HOSTER_GIT_EMAIL</code> change i
 it contains passwords in plain text and must be kept private. For the user, the procedure is described in the
 <a href="User%20Manual.html">user manual</a>.</p></section><section class="sec" id="manuali"><h3 class="h-sec" data-index="manuals;documentation;index;search">11.5 · The manuals</h3><p>The two manuals are <b>self-contained HTML files</b>: <code>docs/User Manual.html</code> and
 <code>docs/Technical Manual.html</code>. Style sheet, diagrams (SVG drawn in the document) and scripts are
-embedded: no external resources, no libraries. They open from the clone even without a network and print on A4
+embedded: no external resources, no libraries. The style sheet and the script are the ones shared by the
+manuals of all seven projects, identical in each. They open from the clone even without a network and print on A4
 (cover on one page, one chapter per page, side contents hidden).</p>
-<ul class="ul"><li><b>Search</b>: the box in the sidebar (key <code>/</code>) filters the sections that contain all the words searched for, dims the contents entries that do not match, lists the results with an excerpt and, once a result is chosen (or with <code>Enter</code>), takes you to the section highlighting the occurrences. <code>Esc</code> clears it.</li><li><b>Index</b>: generated on opening from the terms marked with the <code>data-index</code> attribute (several terms separated by <code>;</code>), grouped by initial letter, each with a reference to its section.</li><li><b>Without JavaScript</b> the manual remains complete and readable: the search box does not appear and the index shows a notice; the side contents and all the links work.</li></ul>
+<ul class="ul"><li><b>Search</b>: the box in the sidebar (key <code>/</code>) filters the sections that contain all the words searched for, dims the contents entries that do not match, lists the results with an excerpt and, once a result is chosen (or with <code>Enter</code>), takes you to the section highlighting the occurrences. <code>Esc</code> clears it.</li><li><b>Copy</b>: on the blocks of commands, the button copies the commands without the <code>$</code> prompt.</li><li><b>Index</b>: generated on opening from the terms marked with the <code>data-index</code> attribute (several terms separated by <code>;</code>), grouped by initial letter, each with a reference to its section.</li><li><b>Without JavaScript</b> the manual remains complete and readable: the search box does not appear and the index shows a notice; the side contents and all the links work.</li></ul>
 <p>The update rules are those of <a href="#controlli-doc">§ 10.4</a>: new option → row in
 <code>helpSections</code> and entry in the user manual's reference; new <code>.go</code> file → row in this manual's file
 map; new version → cover of both.</p></section><section class="sec" id="convenzioni"><h3 class="h-sec" data-index="conventions;gofmt;language">11.6 · Conventions</h3><ul class="ul"><li><b>Italian for the program, English for the manuals</b>: messages, comments and the built-in guide are in Italian; the two manuals are in English. Texts addressed to the user are simple, without technical jargon («copy di prodotto», product copy).</li><li><b>Format</b>: <code>gofmt</code>; clean <code>go vet</code>.</li><li><b>No new dependencies</b> without a strong reason: the single binary is a design choice.</li><li><b>Every fix born in the field has its own</b> regression test, with a fake server.</li><li><b>Verify, don't declare</b>: every statement about behavior comes from a run (tests, <code>--dry-run</code>, real download).</li><li><b>Documentation is updated together with the code</b>: a feature is not finished until the manuals describe it.</li><li><b>Never personal data in the repository</b>: no credentials, personal links or debug dumps, not even in the tests (use <code>example.test</code>).</li><li><b>Commits</b> with the local identity set by <code>tools/setup-dev.sh</code>; before committing: <code>make test</code>, <code>make</code> if the code has changed, <code>git status</code> without personal files.</li></ul></section></section><section class="chapter" id="aggiungere-sito"><div class="ch-head"><span class="ch-kick">Chapter 12</span><h2 class="h-ch">How to add a site</h2></div><section class="sec" id="sito-ciclo"><h3 class="h-sec" data-index="new site;adding a site">12.1 · The work cycle</h3><p class="lead">A site of the XFileSharing family often works without touching the code: the line in
@@ -550,156 +585,323 @@ in depth.</p>
 <div id="index-list" class="idx"><p class="idx-nojs">The index is built by the browser when the
 manual is opened. With JavaScript disabled, use the side contents and the glossary.</p></div></section></section></main>
   </div>
-  <footer class="doc-foot">hoster · Technical Manual v1.0 · September 2026<br>Copyright (c) 2026 nic-fio. All rights reserved. · <a href="User%20Manual.html">User manual</a></footer>
+  <footer class="doc-foot">hoster · Technical Manual · Version 1.0 · September 2026 · © 2026 Nicola Fiorillo</footer>
 </div>
-<script>(function () {
-  var root = document.documentElement;
-  root.classList.remove('no-js'); root.classList.add('js');
-  function norm(s) { return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
-  var main = document.querySelector('.main');
+<script>window.MANUAL_CODE_TERMS=["7z", "DLConfig", "InsecureSkipVerify", "LoadAccounts", "LoadLinks", "Log", "Lookup", "MinSplit", "NewResolver", "Progress", "RateLimiter", "Resolve", "Resolved", "Resolver", "TestLiveResolve", "WriteAt", "account", "links", "archiveBase", "buildHelp", "buildPasswords", "buildTabs", "cancelFile", "cdFileName", "cleanFileName", "detectCountdown", "directLinkREs", "displayHelp", "downloadFile", "dump", "ensureLogin", "enterRaw", "extractDirectLink", "extractDownloadForm", "extractSet", "fetchRange", "filePage", "fileProg", "findArchiveSets", "firstSep", "flag", "gProg", "goExtractRAR", "goExtractZIP", "gofmt", "help.go", "httptest", "isIncompleteChain", "labelOf", "looksLoggedIn", "main", "make", "make live", "makeSegs", "maxRefresh", "meterReader", "nameFromURLPath", "newDownloadClient", "normHost", "notef", "openFilePage", "pageNameREs", "parseKeys", "parseSize", "probe", "probeInfo", "rardecode", "rePart", "removeSet", "runTUI", "safeJoin", "safeName", "seenDest", "segMeta", "segmented", "singleStream", "termSize", "tlsFallbackTransport", "unrar", "wantsHelp", "withRetry", "fileNameFromHTML", "isStaleLink", "newFakeXFS", "rewriteRT", "serveData", "termios", "x509", "stderr", "stdout", "git bundle", "go test", "Makefile"];</script>
+<script>
+/* Script comune dei manuali dei 7 progetti: ricerca, indice analitico, pulsante Copy. Uguale in tutti i manuali. */
+/* Ricerca nella barra laterale e indice analitico. Senza dipendenze; senza
+   JavaScript il manuale resta completo (la casella di ricerca resta nascosta). */
+(function () {
+  "use strict";
+  var main = document.querySelector(".main");
+  if (!main) return;
 
-  /* ---------- indice analitico ---------- */
-  var list = document.getElementById('index-list');
-  if (list) {
-    var terms = {}, n = 0;
-    main.querySelectorAll('[data-index]').forEach(function (el) {
-      if (!el.id) el.id = 'ix-' + (++n);
-      var sec = el.closest('section.sec'), chap = el.closest('section.chapter');
-      var ref = '';
-      if (sec) { var h = sec.querySelector('.h-sec'); ref = h ? h.textContent.split(' · ')[0] : ''; }
-      if (!ref && chap) { var k = chap.querySelector('.ch-kick'); ref = k ? k.textContent.replace('Chapter ', '') : '§'; }
-      if (el.closest('#glossario')) ref = 'gloss.';
-      el.getAttribute('data-index').split(';').forEach(function (t) {
-        t = t.trim(); if (!t) return;
-        (terms[t] = terms[t] || []).push({ id: el.id, ref: ref });
-      });
+  // Minuscole e senza accenti, carattere per carattere: la lunghezza resta
+  // uguale, così le posizioni trovate valgono anche sul testo originale.
+  function fold(s) {
+    var o = "";
+    for (var i = 0; i < s.length; i++) {
+      var c = s.charAt(i);
+      var f = c.normalize ? c.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase() : c.toLowerCase();
+      o += f.length === 1 ? f : c;
+    }
+    return o;
+  }
+  function esc(s) {
+    return s.replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
     });
-    var keys = Object.keys(terms).sort(function (a, b) {
-      return norm(a.replace(/^[^\w]+/, '')).localeCompare(norm(b.replace(/^[^\w]+/, '')), 'en');
-    });
-    var groups = {};
-    keys.forEach(function (t) {
-      var c = norm(t.replace(/^[^\w]+/, '')).charAt(0).toUpperCase();
-      if (!/[A-Z]/.test(c)) c = '#';
-      (groups[c] = groups[c] || []).push(t);
-    });
-    var html = '';
-    Object.keys(groups).sort().forEach(function (c) {
-      html += '<div class="idx-letter"><h4>' + c + '</h4><ul>';
-      groups[c].forEach(function (t) {
-        var seen = {};
-        html += '<li>' + t.replace(/&/g, '&amp;').replace(/</g, '&lt;');
-        terms[t].forEach(function (r) {
-          if (seen[r.ref]) return; seen[r.ref] = 1;
-          html += ' <a href="' + '#' + r.id + '">' + r.ref + '</a>';
-        });
-        html += '</li>';
-      });
-      html += '</ul></div>';
-    });
-    list.innerHTML = html;
+  }
+  function secTitle(sec) {
+    var h = sec && sec.querySelector("h3.h-sec, h2.h-ch");
+    return h ? h.textContent.replace(/\s+/g, " ").trim() : "";
+  }
+  function splitTitle(t) { // "5.3 · Interruzioni e ripresa" -> ["5.3", "Interruzioni e ripresa"]
+    var m = /^([\d.]+) · (.*)$/.exec(t);
+    return m ? [m[1], m[2]] : ["", t];
   }
 
-  /* ---------- ricerca ---------- */
-  var input = document.getElementById('search-input');
-  var out = document.getElementById('search-results');
-  var info = document.getElementById('search-info');
-  if (!input) return;
-  var secs = Array.prototype.map.call(main.querySelectorAll('section.sec'), function (s) {
-    var h = s.querySelector('.h-sec'), ch = s.closest('section.chapter');
-    return { el: s, id: s.id, title: h ? h.textContent : '', chap: ch ? ch.id : '',
-             text: s.textContent.replace(/\s+/g, ' '), ntext: norm(s.textContent.replace(/\s+/g, ' ')) };
-  });
-  var tocItems = document.querySelectorAll('.toc-list li');
-  var current = [], sel = -1;
+  /* ---------------- indice analitico ---------------- */
+  var list = document.getElementById("index-list");
+  if (list) {
+    var terms = {};
+    var els = main.querySelectorAll("[data-index]");
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i];
+      var target = el.id ? el : el.closest("[id]");
+      if (!target || target.id === "index") continue;
+      var sec = el.closest(".sec") || el.closest(".chapter");
+      var label = splitTitle(secTitle(sec));
+      var names = el.getAttribute("data-index").split(";");
+      for (var j = 0; j < names.length; j++) {
+        var name = names[j].trim();
+        if (!name) continue;
+        var key = fold(name);
+        var t = terms[key] || (terms[key] = { name: name, refs: [], seen: {} });
+        if (t.seen[target.id]) continue;
+        t.seen[target.id] = true;
+        t.refs.push({ id: target.id, n: label[0], title: label[1] });
+      }
+    }
+    var sortKey = function (k) { return k.replace(/^[-.]+/, ""); };
+    var keys = Object.keys(terms).sort(function (a, b) {
+      return sortKey(a).localeCompare(sortKey(b), "en") || a.localeCompare(b, "en");
+    });
+    var groups = [], cur = null;
+    keys.forEach(function (k) {
+      var ch = sortKey(k).charAt(0).toUpperCase();
+      if (!/[A-Z]/.test(ch)) ch = "#";
+      if (!cur || cur.ch !== ch) { cur = { ch: ch, items: [] }; groups.push(cur); }
+      cur.items.push(terms[k]);
+    });
+    var out = "";
+    groups.forEach(function (g) {
+      out += '<div class="idx-g"><h3 class="idx-l">' + g.ch + '</h3><ul class="idx-ul">';
+      g.items.forEach(function (t) {
+        // Voci da mostrare come codice: nomi di file e opzioni, piu' le parole
+        // che il manuale elenca in window.MANUAL_CODE_TERMS (prima di questo script).
+        var isCode = /^[-.]|_|\.(txt|sh|example|conf|toml|json|md|py|efi|nsb)$/.test(t.name) ||
+          (window.MANUAL_CODE_TERMS || []).indexOf(t.name) >= 0;
+        var nm = isCode ? "<code>" + esc(t.name) + "</code>" : esc(t.name);
+        out += '<li><span class="idx-t">' + nm + "</span> — " + t.refs.map(function (r) {
+          return '<a href="' + '#' + r.id + '" title="' + esc(r.title) + '">' + (r.n ? r.n + " " : "") + esc(r.title) + "</a>";
+        }).join(", ") + "</li>";
+      });
+      out += "</ul></div>";
+    });
+    list.innerHTML = out;
+  }
+
+  /* ---------------- ricerca ---------------- */
+  var box = document.getElementById("srch");
+  var q = document.getElementById("srch-q");
+  var info = document.getElementById("srch-info");
+  var res = document.getElementById("srch-res");
+  var toc = document.getElementById("toc");
+  if (!box || !q) return;
+  box.hidden = false;
+
+  var secs = [];
+  var nodes = main.querySelectorAll(".sec");
+  for (var k = 0; k < nodes.length; k++) {
+    var s = nodes[k];
+    if (s.closest("#index")) continue;
+    var parts = [], w = document.createTreeWalker(s, NodeFilter.SHOW_TEXT, null), tn;
+    while ((tn = w.nextNode())) if (!tn.parentNode.closest("h3.h-sec")) parts.push(tn.data);
+    var txt = parts.join(" ").replace(/\s+/g, " ").replace(/ ([,.;:)!?»])/g, "$1").replace(/([(«]) /g, "$1").trim();
+    var tt = secTitle(s);
+    secs.push({ el: s, id: s.id, title: tt, ftitle: fold(tt), text: txt, ftext: fold(txt) });
+  }
+  var tocLinks = {};
+  if (toc) {
+    var as = toc.querySelectorAll("a");
+    for (var a = 0; a < as.length; a++) tocLinks[as[a].getAttribute("href").slice(1)] = as[a].parentNode;
+  }
+
+  function count(hay, w) {
+    var n = 0, p = hay.indexOf(w);
+    while (p >= 0) { n++; p = hay.indexOf(w, p + w.length); }
+    return n;
+  }
+  function markWords(s, fs, words) { // testo -> HTML con <mark> sulle parole cercate
+    var ranges = [];
+    words.forEach(function (w) {
+      var p = fs.indexOf(w);
+      while (p >= 0) { ranges.push([p, p + w.length]); p = fs.indexOf(w, p + w.length); }
+    });
+    ranges.sort(function (x, y) { return x[0] - y[0]; });
+    var o = "", last = 0;
+    ranges.forEach(function (r) {
+      if (r[0] < last) return;
+      o += esc(s.slice(last, r[0])) + "<mark>" + esc(s.slice(r[0], r[1])) + "</mark>";
+      last = r[1];
+    });
+    return o + esc(s.slice(last));
+  }
 
   function clearMarks() {
-    main.querySelectorAll('mark.hl').forEach(function (m) {
-      var p = m.parentNode; p.replaceChild(document.createTextNode(m.textContent), m); p.normalize();
-    });
+    var ms = main.querySelectorAll("mark.hit");
+    for (var i = 0; i < ms.length; i++) {
+      var m = ms[i], p = m.parentNode;
+      p.replaceChild(document.createTextNode(m.textContent), m);
+      p.normalize();
+    }
   }
-  function highlight(sec, words) {
-    clearMarks();
-    var walker = document.createTreeWalker(sec, NodeFilter.SHOW_TEXT, {
-      acceptNode: function (n) { return n.parentNode.closest('svg,script,style') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT; }
+  function highlight(root, words) {
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (n) {
+        return n.parentNode.closest("svg, script, style, mark") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
+      }
     });
-    var nodes = [], nd;
-    while ((nd = walker.nextNode())) nodes.push(nd);
-    nodes.forEach(function (node) {
-      var t = node.nodeValue, nt = norm(t), ranges = [];
+    var list = [], n;
+    while ((n = walker.nextNode())) list.push(n);
+    var first = null;
+    list.forEach(function (node) {
+      var s = node.data, fs = fold(s), ranges = [];
       words.forEach(function (w) {
-        var i = nt.indexOf(w);
-        while (i >= 0) { ranges.push([i, i + w.length]); i = nt.indexOf(w, i + w.length); }
+        var p = fs.indexOf(w);
+        while (p >= 0) { ranges.push([p, p + w.length]); p = fs.indexOf(w, p + w.length); }
       });
       if (!ranges.length) return;
-      ranges.sort(function (a, b) { return a[0] - b[0]; });
-      var frag = document.createDocumentFragment(), pos = 0;
+      ranges.sort(function (x, y) { return x[0] - y[0]; });
+      var frag = document.createDocumentFragment(), last = 0;
       ranges.forEach(function (r) {
-        if (r[0] < pos) return;
-        frag.appendChild(document.createTextNode(t.slice(pos, r[0])));
-        var m = document.createElement('mark'); m.className = 'hl'; m.textContent = t.slice(r[0], r[1]);
-        frag.appendChild(m); pos = r[1];
+        if (r[0] < last) return;
+        if (r[0] > last) frag.appendChild(document.createTextNode(s.slice(last, r[0])));
+        var m = document.createElement("mark");
+        m.className = "hit";
+        m.textContent = s.slice(r[0], r[1]);
+        frag.appendChild(m);
+        if (!first) first = m;
+        last = r[1];
       });
-      frag.appendChild(document.createTextNode(t.slice(pos)));
+      if (last < s.length) frag.appendChild(document.createTextNode(s.slice(last)));
       node.parentNode.replaceChild(frag, node);
     });
+    return first;
   }
-  function words() { return norm(input.value).split(/\s+/).filter(function (w) { return w.length > 1; }); }
-  function go(i) {
-    var r = current[i]; if (!r) return;
-    location.hash = r.id;
-    highlight(r.el, words());
-    var m = r.el.querySelector('mark.hl');
-    (m || r.el).scrollIntoView({ block: m ? 'center' : 'start' });
-  }
-  function render() {
-    var ws = words();
-    out.innerHTML = ''; sel = -1; current = [];
-    if (!ws.length) {
-      info.textContent = ''; tocItems.forEach(function (li) { li.classList.remove('toc-dim'); });
-      clearMarks(); return;
+
+  var found = [], sel = -1, words = [];
+  function search() {
+    var v = fold(q.value.trim());
+    words = v.split(/\s+/).filter(function (w) { return w.length > 0; });
+    found = [];
+    sel = -1;
+    Object.keys(tocLinks).forEach(function (id) { tocLinks[id].classList.remove("toc-hit"); });
+    if (v.length < 2) {
+      res.innerHTML = "";
+      info.textContent = v.length ? "Type at least two letters." : "";
+      if (toc) toc.classList.remove("filtering");
+      clearMarks();
+      return;
     }
     secs.forEach(function (s) {
-      if (!ws.every(function (w) { return s.ntext.indexOf(w) >= 0; })) return;
-      var score = ws.reduce(function (a, w) { return a + (norm(s.title).indexOf(w) >= 0 ? 10 : 1); }, 0);
-      current.push({ el: s.el, id: s.id, title: s.title, chap: s.chap, text: s.text, ntext: s.ntext, score: score });
+      var score = 0;
+      for (var i = 0; i < words.length; i++) {
+        var c = count(s.ftext, words[i]);
+        var inTitle = s.ftitle.indexOf(words[i]) >= 0;
+        if (!c && !inTitle) return;
+        score += c + (inTitle ? 20 : 0);
+      }
+      found.push({ s: s, score: score });
     });
-    current.sort(function (a, b) { return b.score - a.score; });
-    var hit = {};
-    current.forEach(function (r) { hit[r.id] = 1; hit[r.chap] = 1; });
-    tocItems.forEach(function (li) {
-      var a = li.querySelector('a'); var id = a ? a.getAttribute('href').slice(1) : '';
-      li.classList.toggle('toc-dim', !hit[id]);
+    found.sort(function (x, y) { return y.score - x.score; });
+    info.textContent = found.length
+      ? (found.length === 1 ? "1 section found" : found.length + " sections found") + " · Enter to open the first"
+      : "No results.";
+    var html = "";
+    found.slice(0, 15).forEach(function (f, i) {
+      var s = f.s, p = Math.max(0, s.ftext.indexOf(words[0]));
+      var a = Math.max(0, p - 50), b = Math.min(s.text.length, p + words[0].length + 70);
+      var snip = (a > 0 ? "…" : "") + markWords(s.text.slice(a, b), s.ftext.slice(a, b), words) + (b < s.text.length ? "…" : "");
+      var t = splitTitle(s.title);
+      html += '<li><a href="' + '#' + s.id + '" data-i="' + i + '"><span class="r-t"><span class="toc-n">' + t[0] +
+        "</span><span>" + esc(t[1]) + '</span></span><span class="r-s">' + snip + "</span></a></li>";
     });
-    info.textContent = current.length ? current.length + (current.length === 1 ? ' section found' : ' sections found') : 'No sections found';
-    current.slice(0, 12).forEach(function (r, i) {
-      var p = r.ntext.indexOf(ws[0]), a = Math.max(0, p - 40);
-      var snip = (a > 0 ? '…' : '') + r.text.slice(a, p + 70) + '…';
-      var li = document.createElement('li'), l = document.createElement('a');
-      l.href = '#' + r.id;
-      var b = document.createElement('b'); b.textContent = r.title;
-      var sp = document.createElement('span'); sp.textContent = snip;
-      l.appendChild(b); l.appendChild(sp);
-      l.addEventListener('click', function (ev) { ev.preventDefault(); go(i); });
-      li.appendChild(l); out.appendChild(li);
-    });
-  }
-  function mark() {
-    out.querySelectorAll('a').forEach(function (a, i) { a.classList.toggle('sel', i === sel); });
-  }
-  var timer;
-  input.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(render, 120); });
-  input.addEventListener('keydown', function (ev) {
-    var n = Math.min(current.length, 12);
-    if (ev.key === 'Enter') { ev.preventDefault(); go(sel >= 0 ? sel : 0); }
-    else if (ev.key === 'ArrowDown' && n) { ev.preventDefault(); sel = (sel + 1) % n; mark(); }
-    else if (ev.key === 'ArrowUp' && n) { ev.preventDefault(); sel = (sel - 1 + n) % n; mark(); }
-    else if (ev.key === 'Escape') { input.value = ''; render(); }
-  });
-  document.addEventListener('keydown', function (ev) {
-    if (ev.key === '/' && document.activeElement !== input && !ev.ctrlKey && !ev.metaKey && !ev.altKey) {
-      ev.preventDefault(); input.focus(); input.select();
+    res.innerHTML = html;
+    if (toc) {
+      toc.classList.add("filtering");
+      found.forEach(function (f) {
+        var li = tocLinks[f.s.id];
+        if (li) li.classList.add("toc-hit");
+        var ch = f.s.el.closest(".chapter");
+        if (ch && tocLinks[ch.id]) tocLinks[ch.id].classList.add("toc-hit");
+      });
     }
+  }
+  function go(i) {
+    var f = found[i];
+    if (!f) return;
+    clearMarks();
+    var first = highlight(f.s.el, words);
+    if (history.replaceState) history.replaceState(null, "", "#" + f.s.id);
+    (first || f.s.el).scrollIntoView({ block: first ? "center" : "start" });
+    f.s.el.classList.remove("flash");
+    void f.s.el.offsetWidth;
+    f.s.el.classList.add("flash");
+  }
+  function setSel(i) {
+    var links = res.querySelectorAll("a");
+    if (!links.length) return;
+    sel = (i + links.length) % links.length;
+    for (var k = 0; k < links.length; k++) links[k].classList.toggle("on", k === sel);
+    links[sel].scrollIntoView({ block: "nearest" });
+  }
+
+  var timer = null;
+  q.addEventListener("input", function () {
+    clearTimeout(timer);
+    timer = setTimeout(search, 120);
   });
-})();</script>
+  q.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") { e.preventDefault(); clearTimeout(timer); search(); go(sel >= 0 ? sel : 0); }
+    else if (e.key === "ArrowDown") { e.preventDefault(); setSel(sel + 1); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); setSel(sel - 1); }
+    else if (e.key === "Escape") { q.value = ""; search(); q.blur(); }
+  });
+  res.addEventListener("click", function (e) {
+    var a = e.target.closest("a[data-i]");
+    if (!a) return;
+    e.preventDefault();
+    go(+a.getAttribute("data-i"));
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "/" || e.ctrlKey || e.metaKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
+    e.preventDefault();
+    q.focus();
+    q.select();
+  });
+})();
+/* Pulsante Copy sui blocchi di comandi: copia le righe che iniziano con il
+   prompt "$ ", senza il prompt. L'etichetta sta in CSS (data-l), cosi' non
+   entra nel testo della pagina ne' nella ricerca. */
+(function () {
+  "use strict";
+  var pres = document.querySelectorAll(".main pre.code");
+  for (var i = 0; i < pres.length; i++) (function (pre) {
+    var lines = pre.textContent.replace(/\s+$/, "").split("\n"), cmds = [];
+    for (var k = 0; k < lines.length; k++) {
+      var m = /^\$ (.*)$/.exec(lines[k]);
+      if (m) cmds.push(m[1]);
+    }
+    if (!cmds.length) return;              // non e' un blocco di comandi
+    var text = cmds.join("\n");
+    var wrap = document.createElement("div");
+    wrap.className = "code-w";
+    pre.parentNode.insertBefore(wrap, pre);
+    wrap.appendChild(pre);
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "copy";
+    btn.setAttribute("data-l", "Copy");
+    btn.setAttribute("aria-label", "Copy the command" + (cmds.length > 1 ? "s" : ""));
+    btn.title = "Copy the command" + (cmds.length > 1 ? "s" : "");
+    var t = null;
+    function done() {
+      btn.setAttribute("data-l", "Copied");
+      btn.classList.add("ok");
+      clearTimeout(t);
+      t = setTimeout(function () { btn.setAttribute("data-l", "Copy"); btn.classList.remove("ok"); }, 1400);
+    }
+    function fallback() {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed"; ta.style.top = "-1000px"; ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try { if (document.execCommand("copy")) done(); } catch (e) {}
+      document.body.removeChild(ta);
+    }
+    btn.addEventListener("click", function () {
+      if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, fallback);
+      else fallback();
+    });
+    wrap.appendChild(btn);
+  })(pres[i]);
+})();
+</script>
 </body></html>

@@ -281,3 +281,20 @@ indirizzi lo spazio diventa `%20`).
 - **Aspetto invariato**: struttura, palette e stile dei documenti sono
   rimasti identici; sono cambiati solo i testi (compresi i termini
   dell'indice analitico) e i collegamenti ai nuovi nomi.
+
+### Stile comune dei manuali (1° ottobre 2026)
+
+Il proprietario ha approvato uno stile unico per i manuali dei sette
+progetti, provato proprio sul manuale utente di hoster.
+
+- **Canone incorporato e identico**: il CSS e lo script comuni (ricerca,
+  indice analitico, pulsante Copy) stanno alla lettera in ogni manuale; un
+  cambio si fa in tutti e sette i progetti, mai in uno solo.
+- **Copertina bianca con il logo**: il logo di `logos/` (copia ridotta,
+  incorporata) prende il posto del nome scritto; restano il titolo, Version
+  e Date.
+- **Piè di pagina di una riga**: `hoster · User Manual · Version 1.0 ·
+  September 2026 · © 2026 Nicola Fiorillo`. Nei manuali l'autore è
+  «Nicola Fiorillo», non più «nic-fio» (che resta negli indirizzi).
+- **Testo invariato**: cambia solo l'aspetto; nel manuale tecnico il § 11.5
+  ricorda che stile e script sono quelli comuni e descrive il pulsante Copy.

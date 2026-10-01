@@ -10,9 +10,9 @@ Fallisce se:
   - l'eseguibile ./hoster (registrato nel repository) manca, non è un ELF
     x86-64 o non contiene la versione di help.go;
   - la versione di help.go non coincide con quella di README.md,
-    docs/index.html e dei due manuali (i manuali sono in inglese: nella
-    copertina c'è <span>Version</span>, in docs/index.html <span>Versione</span>);
-  - un manuale non dichiara lang="en";
+    docs/index.html e dei due manuali (in inglese: <span>Version</span> in
+    copertina; in docs/index.html anche nel piè di pagina);
+  - un manuale o docs/index.html non dichiara lang="en";
   - un link interno #ancora dei manuali punta a un id inesistente;
   - un link relativo di docs/index.html o dei manuali punta a un file che non
     esiste in docs/ (i nomi dei manuali contengono uno spazio: negli href va
@@ -79,7 +79,8 @@ if not version:
 else:
     checks = {
         "README.md": rf"Versione {re.escape(version)}\b",
-        "docs/index.html": rf"<span>Versione</span><b>{re.escape(version)}</b>",
+        "docs/index.html": rf"<span>Version</span><b>{re.escape(version)}</b>[\s\S]*"
+                           rf'<footer class="doc-foot">hoster · Documentation · Version {re.escape(version)} · ',
         "docs/User Manual.html": rf"<span>Version</span><b>{re.escape(version)}</b>",
         "docs/Technical Manual.html": rf"<span>Version</span><b>{re.escape(version)}</b>",
     }
@@ -99,10 +100,10 @@ else:
     elif version and ("hoster " + version).encode() not in data:
         err(f"./hoster non contiene la versione {version}: rigeneralo con 'make'")
 
-# ---- lingua dei manuali ----
-for path, text in ((USER, user), (TECH, tech)):
+# ---- lingua dei manuali e della pagina iniziale ----
+for path, text in ((USER, user), (TECH, tech), (DOCS / "index.html", (DOCS / "index.html").read_text())):
     if not re.search(r'<html lang="en"[ >]', text):
-        err(f'{path.name}: manca <html lang="en"> (i manuali sono in inglese)')
+        err(f'{path.name}: manca <html lang="en"> (manuali e pagina iniziale sono in inglese)')
 
 # ---- link relativi verso altri file di docs/ ----
 index = DOCS / "index.html"
